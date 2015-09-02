@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.arunsudhir.radiomalayalam.song.SongContent;
+import com.arunsudhir.radiomalayalam.song.SongItem;
 
 /**
  * A fragment representing a single Song detail screen.
@@ -25,7 +26,7 @@ public class SongDetailFragment extends Fragment {
     /**
      * The dummy content this fragment is presenting.
      */
-    private SongContent.SongItem mItem;
+    private SongItem mItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -53,7 +54,7 @@ public class SongDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.song_detail)).setText(mItem.content);
+            ((TextView) rootView.findViewById(R.id.song_detail)).setText(mItem.songName);
         }
 
         return rootView;

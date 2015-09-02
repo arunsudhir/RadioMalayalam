@@ -1,13 +1,26 @@
 package com.arunsudhir.radiomalayalam;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
+import com.arunsudhir.radiomalayalam.io.JsonReader;
 import com.arunsudhir.radiomalayalam.song.SongContent;
+import com.arunsudhir.radiomalayalam.song.SongItem;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * A list fragment representing a list of Songs. This fragment
@@ -71,11 +84,17 @@ public class SongListFragment extends ListFragment {
         super.onCreate(savedInstanceState);
 
         // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<SongContent.SongItem>(
+        /*setListAdapter(new ArrayAdapter<SongItem>(
                 getActivity(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
-                SongContent.ITEMS));
+                SongContent.ITEMS));*/
+        new JsonReaderAsyncTask().execute();
+       /* setListAdapter(new SongListAdapter(
+                getActivity(),
+                SongContent.ITEMS));*/
+
+
     }
 
     @Override
@@ -147,5 +166,59 @@ public class SongListFragment extends ListFragment {
         }
 
         mActivatedPosition = position;
+    }
+
+    public class JsonReaderAsyncTask extends AsyncTask<String, Integer, ArrayList<SongItem>> {
+
+        ArrayList<SongItem> songsList = new ArrayList<>();
+        String url = "http://www.mywimbo.com/MalRadio/getTopListenedSongs.php?year1=2010&genre1=fast&language=malayalam";
+        String SONGS = "songs";
+        String SONG = "song";
+
+        private ProgressDialog pDialog;
+
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+            pDialog = new ProgressDialog(getActivity());
+            pDialog.setMessage("Loading Data ...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        @Override
+        protected ArrayList<SongItem> doInBackground(String... params) {
+
+            JsonReader jParser = new JsonReader();
+            JSONObject json = jParser.getJSONData(url);
+            try{
+                JSONArray songs = json.getJSONArray(SONGS);
+                for(int i=0;i<songs.length();i++){
+                    JSONObject song = songs.getJSONObject(i);
+                    JSONObject songObject = song.getJSONObject(SONG);
+                    SongItem currSong = new SongItem();
+                    currSong.songName = songObject.getString("SongName");
+                    currSong.songPath = songObject.getString("SongPath");
+                    currSong.id = songObject.getString("ID");
+                    currSong.album = songObject.getString("Album");
+                    currSong.singer1 = songObject.getString("Singer1");
+                    currSong.singer2 = songObject.getString("Singer2");
+                    currSong.music = songObject.getString("Music");
+                    songsList.add(currSong);
+                }
+            }catch(JSONException e){
+                e.printStackTrace();
+            }
+            return songsList;
+        }
+        @Override
+        protected void onPostExecute(ArrayList<SongItem> result) {
+            super.onPostExecute(result);
+            pDialog.dismiss();
+            ListAdapter adapter = new SongListAdapter(getActivity(), result);
+            setListAdapter(adapter);
+
+        }
     }
 }
