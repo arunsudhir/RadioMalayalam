@@ -29,6 +29,7 @@ public class SongListAdapter extends ArrayAdapter {
      */
     private class ViewHolder{
         TextView songNameText;
+        TextView albumText;
     }
 
     /**
@@ -53,9 +54,10 @@ public class SongListAdapter extends ArrayAdapter {
             } else {
                 viewToUse = mInflater.inflate(R.layout.songgriditem, null);
             }
-
+            // cache the view atrefacts into holder for efficiency
             holder = new ViewHolder();
             holder.songNameText = (TextView)viewToUse.findViewById(R.id.songName);
+            holder.albumText = (TextView)viewToUse.findViewById(R.id.album);
             viewToUse.setTag(holder);
         } else {
             viewToUse = convertView;
@@ -63,6 +65,7 @@ public class SongListAdapter extends ArrayAdapter {
         }
 
         holder.songNameText.setText(item.getSongName());
+        holder.albumText.setText(item.getAlbum());
         return viewToUse;
     }
 }

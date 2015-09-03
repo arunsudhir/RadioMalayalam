@@ -206,6 +206,7 @@ public class SongListFragment extends ListFragment {
                     currSong.singer2 = songObject.getString("Singer2");
                     currSong.music = songObject.getString("Music");
                     songsList.add(currSong);
+                    SongContent.ITEM_MAP.put(currSong.songName, currSong);
                 }
             }catch(JSONException e){
                 e.printStackTrace();
