@@ -1,7 +1,11 @@
 package com.arunsudhir.radiomalayalam;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -12,6 +16,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.arunsudhir.radiomalayalam.io.JsonReader;
+import com.arunsudhir.radiomalayalam.service.PlayerService;
 import com.arunsudhir.radiomalayalam.song.SongContent;
 import com.arunsudhir.radiomalayalam.song.SongItem;
 
@@ -33,6 +38,8 @@ import java.util.HashMap;
  */
 public class SongListFragment extends ListFragment {
 
+   // final Context context =  getActivity();
+    // static AlertDialog.Builder builder1;
     /**
      * The serialization (saved instance state) Bundle key representing the
      * activated item position. Only used on tablets.
@@ -43,7 +50,7 @@ public class SongListFragment extends ListFragment {
      * The fragment's current callback object, which is notified of list item
      * clicks.
      */
-    private Callbacks mCallbacks = sDummyCallbacks;
+    private Callbacks mCallbacks;
 
     /**
      * The current activated item position. Only used on tablets.
@@ -66,11 +73,14 @@ public class SongListFragment extends ListFragment {
      * A dummy implementation of the {@link Callbacks} interface that does
      * nothing. Used only when this fragment is not attached to an activity.
      */
-    private static Callbacks sDummyCallbacks = new Callbacks() {
+    /*private Callbacks sDummyCallbacks = new Callbacks() {
         @Override
         public void onItemSelected(String id) {
+            Intent serviceIntent = new Intent(PlayerService.class.getName());
+            serviceIntent.putExtra("songUrl", "http://www.mywimbo.com/MalRadio/2015/Mili/Kanmaniye.mp3");
+            getActivity().startService(serviceIntent);
         }
-    };
+    };*/
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -89,6 +99,22 @@ public class SongListFragment extends ListFragment {
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 SongContent.ITEMS));*/
+
+        /*AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+        builder1.setMessage("Write your message here.");
+        builder1.setCancelable(true);
+        builder1.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        builder1.setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });*/
         new JsonReaderAsyncTask().execute();
        /* setListAdapter(new SongListAdapter(
                 getActivity(),
@@ -125,7 +151,7 @@ public class SongListFragment extends ListFragment {
         super.onDetach();
 
         // Reset the active callbacks interface to the dummy implementation.
-        mCallbacks = sDummyCallbacks;
+       // mCallbacks = sDummyCallbacks;
     }
 
     @Override
@@ -134,7 +160,8 @@ public class SongListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(SongContent.ITEMS.get(position).id);
+       // mCallbacks = sDummyCallbacks;
+        mCallbacks.onItemSelected("Kanmaniye"); //SongContent.ITEMS.get(position).id
     }
 
     @Override
@@ -171,7 +198,7 @@ public class SongListFragment extends ListFragment {
     public class JsonReaderAsyncTask extends AsyncTask<String, Integer, ArrayList<SongItem>> {
 
         ArrayList<SongItem> songsList = new ArrayList<>();
-        String url = "http://www.mywimbo.com/MalRadio/getTopListenedSongs.php?year1=2010&genre1=fast&language=malayalam";
+        String url = "http://www.mywimbo.com/MalRadio/getTopListenedSongs.php?year1=2015&language=malayalam";
         String SONGS = "songs";
         String SONG = "song";
 

@@ -1,7 +1,9 @@
 package com.arunsudhir.radiomalayalam;
 
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -9,6 +11,7 @@ import android.widget.ListAdapter;
 import android.widget.SimpleAdapter;
 
 import com.arunsudhir.radiomalayalam.io.JsonReader;
+import com.arunsudhir.radiomalayalam.service.PlayerService;
 import com.arunsudhir.radiomalayalam.song.SongContent;
 import com.arunsudhir.radiomalayalam.song.SongItem;
 
@@ -79,21 +82,25 @@ public class SongListActivity extends FragmentActivity
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
-            Bundle arguments = new Bundle();
+           /* Bundle arguments = new Bundle();
             arguments.putString(SongDetailFragment.ARG_ITEM_ID, id);
             SongDetailFragment fragment = new SongDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.song_detail_container, fragment)
-                    .commit();
+                    .commit();*/
 
         } else {
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
-            Intent detailIntent = new Intent(this, SongDetailActivity.class);
+            /*Intent detailIntent = new Intent(this, SongDetailActivity.class);
             detailIntent.putExtra(SongDetailFragment.ARG_ITEM_ID, id);
-            startActivity(detailIntent);
+            startActivity(detailIntent);*/
         }
+        Intent serviceIntent = new Intent(PlayerService.class.getName());
+        serviceIntent.setComponent(new ComponentName("com.arunsudhir.radiomalayalam.service", "com.arunsudhir.radiomalayalam.service.PlayerService"));
+                serviceIntent.setData(Uri.parse("http://www.mywimbo.com/MalRadio/2015/Mili/Kanmaniye.mp3"));
+        startService(serviceIntent);
     }
 
 }

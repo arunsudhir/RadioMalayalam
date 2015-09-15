@@ -8,7 +8,6 @@
     android:layout_height="wrap_content"
     android:text="Sample Text"
     android:id = "@+id/songName"
-    android:textAllCaps="true"
     android:textColor="#2196F3"
     android:textAppearance="?android:attr/textAppearanceListItem"
     android:layout_gravity = "center_horizontal" />
