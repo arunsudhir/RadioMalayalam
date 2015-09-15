@@ -161,7 +161,8 @@ public class SongListFragment extends ListFragment {
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
        // mCallbacks = sDummyCallbacks;
-        mCallbacks.onItemSelected("Kanmaniye"); //SongContent.ITEMS.get(position).id
+       SongItem selectedItem = (SongItem) listView.getItemAtPosition(position);
+        mCallbacks.onItemSelected(selectedItem.getSongPath()); //SongContent.ITEMS.get(position).id
     }
 
     @Override

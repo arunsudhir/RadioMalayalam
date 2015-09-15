@@ -77,7 +77,7 @@ public class SongListActivity extends FragmentActivity
      * indicating that the item with the given ID was selected.
      */
     @Override
-    public void onItemSelected(String id) {
+    public void onItemSelected(String songPath) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
@@ -99,7 +99,7 @@ public class SongListActivity extends FragmentActivity
         }
         Intent serviceIntent = new Intent(PlayerService.class.getName());
         serviceIntent.setComponent(new ComponentName("com.arunsudhir.radiomalayalam.service", "com.arunsudhir.radiomalayalam.service.PlayerService"));
-                serviceIntent.setData(Uri.parse("http://www.mywimbo.com/MalRadio/2015/Mili/Kanmaniye.mp3"));
+        serviceIntent.setData(Uri.parse("http://www.mywimbo.com/MalRadio/"+songPath));
         startService(serviceIntent);
     }
 
