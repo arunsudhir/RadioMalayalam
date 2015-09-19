@@ -24,7 +24,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".SongListActivity" />
         </activity>
-        <service android:name="com.arunsudhir.radiomalayalam.service.PlayerService"  android:enabled="true"/>
+        <service android:name="com.arunsudhir.radiomalayalam.service.PlayerService"  android:enabled="true"> </service>
     </application>
 
 </manifest>

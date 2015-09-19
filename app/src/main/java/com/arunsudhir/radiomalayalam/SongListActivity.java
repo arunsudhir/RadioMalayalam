@@ -97,8 +97,8 @@ public class SongListActivity extends FragmentActivity
             detailIntent.putExtra(SongDetailFragment.ARG_ITEM_ID, id);
             startActivity(detailIntent);*/
         }
-        Intent serviceIntent = new Intent(PlayerService.class.getName());
-        serviceIntent.setComponent(new ComponentName("com.arunsudhir.radiomalayalam.service", "com.arunsudhir.radiomalayalam.service.PlayerService"));
+        Intent serviceIntent = new Intent(this, PlayerService.class);
+        //serviceIntent.setComponent(new ComponentName("com.arunsudhir.radiomalayalam.service", "com.arunsudhir.radiomalayalam.service.PlayerService"));
         serviceIntent.setData(Uri.parse("http://www.mywimbo.com/MalRadio/"+songPath));
         startService(serviceIntent);
     }
