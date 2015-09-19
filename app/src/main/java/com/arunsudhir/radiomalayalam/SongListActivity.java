@@ -19,6 +19,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -99,7 +101,12 @@ public class SongListActivity extends FragmentActivity
         }
         Intent serviceIntent = new Intent(this, PlayerService.class);
         //serviceIntent.setComponent(new ComponentName("com.arunsudhir.radiomalayalam.service", "com.arunsudhir.radiomalayalam.service.PlayerService"));
-        serviceIntent.setData(Uri.parse("http://www.mywimbo.com/MalRadio/"+songPath));
+        try {
+            serviceIntent.setData(Uri.parse("http://www.mywimbo.com/MalRadio/" + URLEncoder.encode(songPath, "UTF-8")));
+        }catch(UnsupportedEncodingException e)
+        {
+
+        }
         startService(serviceIntent);
     }
 
