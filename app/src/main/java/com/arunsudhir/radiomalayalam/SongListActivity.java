@@ -88,7 +88,7 @@ public class SongListActivity extends FragmentActivity
         Intent serviceIntent = new Intent(this, PlayerService.class);
         //serviceIntent.setComponent(new ComponentName("com.arunsudhir.radiomalayalam.service", "com.arunsudhir.radiomalayalam.service.PlayerService"));
         try {
-            URI songUri = new URI("http", CommunicationConstants.songsHost, CommunicationConstants.songsRelativeUrl + songItem.songPath);
+            URI songUri = new URI("http", CommunicationConstants.songsHost, CommunicationConstants.songsRelativeUrl + songItem.songPath, null, null);
             Log.i("songBath",songUri.toString());
             serviceIntent.setData(Uri.parse(songUri.toString()));
             serviceIntent.putExtra("currentSongId", songItem.getId());

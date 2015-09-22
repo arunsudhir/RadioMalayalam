@@ -65,7 +65,6 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
             _mediaPlayer.setDataSource(_songUrl);
             _mediaPlayer.prepare();
             _mediaPlayer.start();
-
         }
         catch(IOException ex)
         {
@@ -128,7 +127,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         String path = _currPlaylist.get(_currentSongPostion).songPath;
         URI songUri = null;
         try {
-            songUri = new URI("http", CommunicationConstants.songsHost, CommunicationConstants.songsRelativeUrl + path);
+            songUri = new URI("http", CommunicationConstants.songsHost, CommunicationConstants.songsRelativeUrl + path, null, null);
             Log.i("LocalService: songBath",songUri.toString());
             _mediaPlayer.stop();
             _mediaPlayer.reset();
