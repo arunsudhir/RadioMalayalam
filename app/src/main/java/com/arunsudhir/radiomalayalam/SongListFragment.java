@@ -1,31 +1,23 @@
 package com.arunsudhir.radiomalayalam;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
-import com.arunsudhir.radiomalayalam.io.JsonReader;
-import com.arunsudhir.radiomalayalam.service.PlayerService;
-import com.arunsudhir.radiomalayalam.song.SongContent;
+import com.arunsudhir.radiomalayalam.communication.CommunicationConstants;
+import com.arunsudhir.radiomalayalam.io.AsyncTaskPreAndPostExecutor;
+import com.arunsudhir.radiomalayalam.io.JsonReaderAsyncTask;
 import com.arunsudhir.radiomalayalam.song.SongItem;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * A list fragment representing a list of Songs. This fragment
@@ -66,7 +58,7 @@ public class SongListFragment extends ListFragment {
         /**
          * Callback for when an item has been selected.
          */
-        public void onItemSelected(String id);
+        public void onItemSelected(SongItem item);
     }
 
     /**
@@ -115,7 +107,7 @@ public class SongListFragment extends ListFragment {
                         dialog.cancel();
                     }
                 });*/
-        new JsonReaderAsyncTask().execute();
+        new JsonReaderAsyncTask(new ShowProgressDialogExecutor()).execute();
        /* setListAdapter(new SongListAdapter(
                 getActivity(),
                 SongContent.ITEMS));*/
@@ -162,7 +154,7 @@ public class SongListFragment extends ListFragment {
         // fragment is attached to one) that an item has been selected.
        // mCallbacks = sDummyCallbacks;
        SongItem selectedItem = (SongItem) listView.getItemAtPosition(position);
-        mCallbacks.onItemSelected(selectedItem.getSongPath()); //SongContent.ITEMS.get(position).id
+        mCallbacks.onItemSelected(selectedItem); //SongContent.ITEMS.get(position).id
     }
 
     @Override
@@ -196,18 +188,12 @@ public class SongListFragment extends ListFragment {
         mActivatedPosition = position;
     }
 
-    public class JsonReaderAsyncTask extends AsyncTask<String, Integer, ArrayList<SongItem>> {
+    public class ShowProgressDialogExecutor implements AsyncTaskPreAndPostExecutor
+    {
+        ProgressDialog  pDialog;
 
-        ArrayList<SongItem> songsList = new ArrayList<>();
-        String url = "http://www.mywimbo.com/MalRadio/getTopListenedSongs.php?year1=2015&language=malayalam";
-        String SONGS = "songs";
-        String SONG = "song";
-
-        private ProgressDialog pDialog;
-
-        protected void onPreExecute() {
-
-            super.onPreExecute();
+        @Override
+        public void PreExecute() {
             pDialog = new ProgressDialog(getActivity());
             pDialog.setMessage("Loading Data ...");
             pDialog.setIndeterminate(false);
@@ -216,38 +202,24 @@ public class SongListFragment extends ListFragment {
         }
 
         @Override
-        protected ArrayList<SongItem> doInBackground(String... params) {
-
-            JsonReader jParser = new JsonReader();
-            JSONObject json = jParser.getJSONData(url);
-            try{
-                JSONArray songs = json.getJSONArray(SONGS);
-                for(int i=0;i<songs.length();i++){
-                    JSONObject song = songs.getJSONObject(i);
-                    JSONObject songObject = song.getJSONObject(SONG);
-                    SongItem currSong = new SongItem();
-                    currSong.songName = songObject.getString("SongName");
-                    currSong.songPath = songObject.getString("SongPath");
-                    currSong.id = songObject.getString("ID");
-                    currSong.album = songObject.getString("Album");
-                    currSong.singer1 = songObject.getString("Singer1");
-                    currSong.singer2 = songObject.getString("Singer2");
-                    currSong.music = songObject.getString("Music");
-                    songsList.add(currSong);
-                    SongContent.ITEM_MAP.put(currSong.songName, currSong);
-                }
-            }catch(JSONException e){
-                e.printStackTrace();
-            }
-            return songsList;
-        }
-        @Override
-        protected void onPostExecute(ArrayList<SongItem> result) {
-            super.onPostExecute(result);
+        public void PostExecute(ArrayList<SongItem> result) {
             pDialog.dismiss();
             ListAdapter adapter = new SongListAdapter(getActivity(), result);
             setListAdapter(adapter);
 
+            //serialize the currentPlaylist onto file
+            FileOutputStream fos;
+            ObjectOutputStream oos;
+
+            try {
+                fos = getActivity().openFileOutput(CommunicationConstants.CurrentPlaylist, Context.MODE_PRIVATE);
+                oos = new ObjectOutputStream(fos);
+                oos.writeObject(result);
+                oos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
+
 }

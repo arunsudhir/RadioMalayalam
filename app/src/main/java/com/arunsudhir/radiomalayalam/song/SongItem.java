@@ -3,10 +3,13 @@ package com.arunsudhir.radiomalayalam.song;
 /**
  * Created by Arun on 9/1/2015.
  */
+
+import java.io.Serializable;
+
 /**
  * An item representing a song
  */
-public class SongItem {
+public class SongItem implements Serializable{
     public String id;
     public String songName;
     public String album;

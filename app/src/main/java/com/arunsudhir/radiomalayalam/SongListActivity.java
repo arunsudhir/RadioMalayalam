@@ -1,5 +1,7 @@
 package com.arunsudhir.radiomalayalam;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -7,9 +9,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.widget.ListAdapter;
 import android.widget.SimpleAdapter;
 
+import com.arunsudhir.radiomalayalam.communication.CommunicationConstants;
 import com.arunsudhir.radiomalayalam.io.JsonReader;
 import com.arunsudhir.radiomalayalam.service.PlayerService;
 import com.arunsudhir.radiomalayalam.song.SongContent;
@@ -79,7 +83,7 @@ public class SongListActivity extends FragmentActivity
      * indicating that the item with the given ID was selected.
      */
     @Override
-    public void onItemSelected(String songPath) {
+    public void onItemSelected(SongItem songItem) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
@@ -102,7 +106,10 @@ public class SongListActivity extends FragmentActivity
         Intent serviceIntent = new Intent(this, PlayerService.class);
         //serviceIntent.setComponent(new ComponentName("com.arunsudhir.radiomalayalam.service", "com.arunsudhir.radiomalayalam.service.PlayerService"));
         try {
-            serviceIntent.setData(Uri.parse("http://www.mywimbo.com/MalRadio/" + URLEncoder.encode(songPath, "UTF-8")));
+            String encodedPath = URLEncoder.encode(songItem.songPath, "UTF-8");
+            Log.i("songPath", encodedPath);
+            serviceIntent.setData(Uri.parse(CommunicationConstants.songsBasePath + encodedPath));
+            serviceIntent.putExtra("currentSongId", songItem.getId());
         }catch(UnsupportedEncodingException e)
         {
 
