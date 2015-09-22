@@ -5,6 +5,7 @@ package com.arunsudhir.radiomalayalam.communication;
  */
 public interface CommunicationConstants {
     public static final String CurrentPlaylist = "CurrentPlaylist";
-    public static final String songsBasePath = "http://www.mywimbo.com/MalRadio/";
+    public static final String songsHost = "www.mywimbo.com";
+    public static final String songsRelativeUrl = "/MalRadio/";
 
 }

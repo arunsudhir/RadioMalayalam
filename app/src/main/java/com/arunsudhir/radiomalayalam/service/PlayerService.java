@@ -4,11 +4,21 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.arunsudhir.radiomalayalam.communication.CommunicationConstants;
+import com.arunsudhir.radiomalayalam.song.SongItem;
+
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 
 /**
  * Created by Arun on 9/2/2015.
@@ -22,7 +32,9 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
 
     private MediaPlayer _mediaPlayer = new MediaPlayer();
     private String _songUrl;
-
+    private String _currentSongId;
+    private int _currentSongPostion = -1;
+    private ArrayList<SongItem> _currPlaylist = new ArrayList<>();
 
     @Override
     public void onCreate() {
@@ -36,11 +48,14 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("LocalService", "Received start id " + startId + ": " + intent);
         _songUrl = intent.getData().toString();
+        _currentSongId = intent.getStringExtra("currentSongId");
+
         if(_mediaPlayer != null)
         {
             if(_mediaPlayer.isPlaying())
             {
                 _mediaPlayer.stop();
+                _mediaPlayer.reset();
             }
         }
         else{
@@ -50,11 +65,29 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
             _mediaPlayer.setDataSource(_songUrl);
             _mediaPlayer.prepare();
             _mediaPlayer.start();
+
         }
         catch(IOException ex)
         {
             // pass an intent saying that the song wasnt found
         }
+
+        // now get the current playlist
+        ArrayList<SongItem> currentPlaylist = null;
+        try {
+            FileInputStream fis = openFileInput(CommunicationConstants.CurrentPlaylist);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            _currPlaylist = (ArrayList<SongItem>)ois.readObject();
+        }
+        catch (Exception e){e.printStackTrace();}
+        for (int i=0; i< _currPlaylist.size(); i++)
+         {
+             if(_currPlaylist.get(i).getId().equals(_currentSongId))
+             {
+                 _currentSongPostion = i;
+                 break;
+             }
+         }
         return START_NOT_STICKY;
     }
 
@@ -91,6 +124,23 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
 
     @Override
     public void onCompletion(MediaPlayer mp) {
+       _currentSongPostion = (_currentSongPostion + 1) % (_currPlaylist.size());
+        String path = _currPlaylist.get(_currentSongPostion).songPath;
+        URI songUri = null;
+        try {
+            songUri = new URI("http", CommunicationConstants.songsHost, CommunicationConstants.songsRelativeUrl + path);
+            Log.i("LocalService: songBath",songUri.toString());
+            _mediaPlayer.stop();
+            _mediaPlayer.reset();
+            _mediaPlayer.setDataSource(songUri.toString());
+            _mediaPlayer.prepare();
+            _mediaPlayer.start();
+
+        }
+        catch(Exception e){
+             Log.i("urlPEncPath",songUri.toString());
+        }
+
 
     }
 }

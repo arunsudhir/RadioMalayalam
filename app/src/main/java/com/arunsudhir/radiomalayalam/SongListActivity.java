@@ -1,34 +1,16 @@
 package com.arunsudhir.radiomalayalam;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.widget.ListAdapter;
-import android.widget.SimpleAdapter;
 
 import com.arunsudhir.radiomalayalam.communication.CommunicationConstants;
-import com.arunsudhir.radiomalayalam.io.JsonReader;
 import com.arunsudhir.radiomalayalam.service.PlayerService;
-import com.arunsudhir.radiomalayalam.song.SongContent;
 import com.arunsudhir.radiomalayalam.song.SongItem;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import static com.arunsudhir.radiomalayalam.song.SongContent.*;
+import java.net.URI;
 
 
 /**
@@ -106,15 +88,16 @@ public class SongListActivity extends FragmentActivity
         Intent serviceIntent = new Intent(this, PlayerService.class);
         //serviceIntent.setComponent(new ComponentName("com.arunsudhir.radiomalayalam.service", "com.arunsudhir.radiomalayalam.service.PlayerService"));
         try {
-            String encodedPath = URLEncoder.encode(songItem.songPath, "UTF-8");
-            Log.i("songPath", encodedPath);
-            serviceIntent.setData(Uri.parse(CommunicationConstants.songsBasePath + encodedPath));
+            URI songUri = new URI("http", CommunicationConstants.songsHost, CommunicationConstants.songsRelativeUrl + songItem.songPath);
+            Log.i("songBath",songUri.toString());
+            serviceIntent.setData(Uri.parse(songUri.toString()));
             serviceIntent.putExtra("currentSongId", songItem.getId());
-        }catch(UnsupportedEncodingException e)
+            startService(serviceIntent);
+        }
+        catch(Exception e)
         {
 
         }
-        startService(serviceIntent);
     }
 
 }
