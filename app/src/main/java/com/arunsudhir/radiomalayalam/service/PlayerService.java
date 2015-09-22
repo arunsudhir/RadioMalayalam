@@ -1,11 +1,13 @@
 package com.arunsudhir.radiomalayalam.service;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.IBinder;
+import android.os.Parcel;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -38,9 +40,10 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
 
     @Override
     public void onCreate() {
-        //mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        NotificationManager mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
         // Display a notification about us starting.  We put an icon in the status bar.
+       //mNM.notify("sdsds",12,new Notification(new Parcel()));
         //showNotification();
     }
 
@@ -64,6 +67,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         try {
             _mediaPlayer.setDataSource(_songUrl);
             _mediaPlayer.prepare();
+            _mediaPlayer.setOnCompletionListener(this);
             _mediaPlayer.start();
         }
         catch(IOException ex)
