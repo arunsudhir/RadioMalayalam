@@ -7,8 +7,8 @@ import java.util.ArrayList;
 /**
  * Created by Arun on 9/22/2015.
  */
-public interface AsyncTaskPreAndPostExecutor {
+public interface AsyncTaskPreAndPostExecutor<T> {
     public void PreExecute();
 
-    public void PostExecute(ArrayList<SongItem> result);
+    public void PostExecute(ArrayList<T> result);
 }

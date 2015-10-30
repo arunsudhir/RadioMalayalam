@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by Arun on 9/22/2015.
  */
-public class JsonReaderAsyncTask extends AsyncTask<String, Integer, ArrayList<SongItem>> {
+public class SongReaderAsyncTask extends AsyncTask<String, Integer, ArrayList<SongItem>> {
 
     ArrayList<SongItem> songsList = new ArrayList<>();
     String url = "http://www.mywimbo.com/MalRadio/getTopListenedSongs.php?year1=2015&language=malayalam";
@@ -22,9 +22,10 @@ public class JsonReaderAsyncTask extends AsyncTask<String, Integer, ArrayList<So
     String SONG = "song";
     AsyncTaskPreAndPostExecutor PreExecutor;
 
-    public JsonReaderAsyncTask(AsyncTaskPreAndPostExecutor preExecutor)
+    public SongReaderAsyncTask(AsyncTaskPreAndPostExecutor preExecutor, String songsUrl)
     {
         PreExecutor = preExecutor;
+        url = songsUrl;
     }
 
     protected void onPreExecute() {

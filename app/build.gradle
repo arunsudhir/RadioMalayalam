@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'RadioMalayalam'
+            keyPassword 'Chinnu123$'
+            storeFile file('C:/Users/Arun/AndroidAppKey.jks')
+            storePassword 'Chinnu123$'
+        }
+    }
     compileSdkVersion 22
     buildToolsVersion "23.0.0"
-
     defaultConfig {
         applicationId "com.arunsudhir.radiomalayalam"
         minSdkVersion 15
@@ -20,7 +27,6 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:22.1.1'
-    compile 'com.android.support:support-v4:22.1.1'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:support-v4:23.0.1'
 }

@@ -1,8 +1,8 @@
 package com.arunsudhir.radiomalayalam;
 
-import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
@@ -15,7 +15,7 @@ import android.view.MenuItem;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link SongDetailFragment}.
  */
-public class SongDetailActivity extends AppCompatActivity{
+public class SongDetailActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +23,7 @@ public class SongDetailActivity extends AppCompatActivity{
         setContentView(R.layout.activity_song_detail);
 
         // Show the Up button in the action bar.
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+       //getActionBar().setDisplayHomeAsUpEnabled(true);
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -42,9 +42,9 @@ public class SongDetailActivity extends AppCompatActivity{
                     getIntent().getStringExtra(SongDetailFragment.ARG_ITEM_ID));
             SongDetailFragment fragment = new SongDetailFragment();
             fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.song_detail_container, fragment)
-                    .commit();
+           // getFragmentManager().beginTransaction()
+             //       .add(R.id.song_detail_container, fragment)
+               //     .commit();
         }
     }
 

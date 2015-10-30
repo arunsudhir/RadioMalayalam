@@ -7,5 +7,5 @@ public interface CommunicationConstants {
     public static final String CurrentPlaylist = "CurrentPlaylist";
     public static final String songsHost = "www.mywimbo.com";
     public static final String songsRelativeUrl = "/MalRadio/";
-
+    public static final String songsBaseUrl = "http://www.mywimbo.com/MalRadio/getTopListenedSongs.php?";
 }

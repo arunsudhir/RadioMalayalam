@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">RadioMalayalam</string>
     <string name="title_song_detail">Song Detail</string>
-    <string name="title_activity_play_list">PlayListActivity</string>
+    <string name="title_song_list">SongListActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_playlist_card">PlaylistCardActivity</string>
 </resources>

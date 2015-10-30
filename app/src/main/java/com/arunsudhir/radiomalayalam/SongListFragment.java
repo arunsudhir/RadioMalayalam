@@ -3,6 +3,7 @@ package com.arunsudhir.radiomalayalam;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
@@ -11,7 +12,7 @@ import android.widget.ListView;
 
 import com.arunsudhir.radiomalayalam.communication.CommunicationConstants;
 import com.arunsudhir.radiomalayalam.io.AsyncTaskPreAndPostExecutor;
-import com.arunsudhir.radiomalayalam.io.JsonReaderAsyncTask;
+import com.arunsudhir.radiomalayalam.io.SongReaderAsyncTask;
 import com.arunsudhir.radiomalayalam.song.SongItem;
 
 
@@ -107,7 +108,10 @@ public class SongListFragment extends ListFragment {
                         dialog.cancel();
                     }
                 });*/
-        new JsonReaderAsyncTask(new ShowProgressDialogExecutor()).execute();
+
+        Intent intent = getActivity().getIntent();
+        String url = intent.getStringExtra("url");
+        new SongReaderAsyncTask(new ShowProgressDialogExecutor(), CommunicationConstants.songsBaseUrl + url).execute();
        /* setListAdapter(new SongListAdapter(
                 getActivity(),
                 SongContent.ITEMS));*/
@@ -118,7 +122,7 @@ public class SongListFragment extends ListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        setActivateOnItemClick(true);
         // Restore the previously serialized activated item position.
         if (savedInstanceState != null
                 && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
@@ -188,14 +192,14 @@ public class SongListFragment extends ListFragment {
         mActivatedPosition = position;
     }
 
-    public class ShowProgressDialogExecutor implements AsyncTaskPreAndPostExecutor
+    public class ShowProgressDialogExecutor implements AsyncTaskPreAndPostExecutor<SongItem>
     {
         ProgressDialog  pDialog;
 
         @Override
         public void PreExecute() {
             pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage("Loading Data ...");
+            pDialog.setMessage("Loading Songs...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
             pDialog.show();
