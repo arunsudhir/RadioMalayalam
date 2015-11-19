@@ -2,6 +2,8 @@ package com.arunsudhir.radiomalayalam.io;
 
 import android.os.AsyncTask;
 
+import com.arunsudhir.radiomalayalam.communication.CommunicationConstants;
+import com.arunsudhir.radiomalayalam.communication.DownloadImageTask;
 import com.arunsudhir.radiomalayalam.playlist.PlaylistItem;
 import com.arunsudhir.radiomalayalam.song.SongContent;
 import com.arunsudhir.radiomalayalam.song.SongItem;
@@ -46,6 +48,7 @@ public class PlaylistReaderAsyncTask extends AsyncTask<String, Integer, ArrayLis
                     PlaylistItem currPlaylist = new PlaylistItem();
                     currPlaylist.playlistName = plObject.getString("Name");
                     currPlaylist.url = plObject.getString("URL");
+                    currPlaylist.heroImageUrl = CommunicationConstants.imagesBaseUrl+plObject.getString("heroImage");
                     plList.add(currPlaylist);
                    // SongContent.ITEM_MAP.put(currSong.songName, currSong);
                 }

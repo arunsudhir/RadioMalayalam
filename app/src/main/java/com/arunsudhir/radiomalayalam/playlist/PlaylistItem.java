@@ -8,6 +8,7 @@ import java.io.Serializable;
 public class PlaylistItem implements Serializable {
     public String playlistName;
     public String url;
+    public String heroImageUrl;
 
     public String getPlaylistName() {
         return playlistName;
@@ -19,6 +20,10 @@ public class PlaylistItem implements Serializable {
 
     public String getPlaylistUrl() {
         return url;
+    }
+
+    public String getHeroImageUrl() {
+        return heroImageUrl;
     }
 
     public void setPlaylistUrl(String playlistUrl) {

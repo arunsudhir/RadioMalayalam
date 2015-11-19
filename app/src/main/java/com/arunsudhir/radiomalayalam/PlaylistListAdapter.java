@@ -6,8 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.arunsudhir.radiomalayalam.communication.CommunicationConstants;
+import com.arunsudhir.radiomalayalam.communication.DownloadImageTask;
 import com.arunsudhir.radiomalayalam.playlist.PlaylistItem;
 
 import java.util.List;
@@ -29,6 +32,7 @@ public class PlaylistListAdapter extends ArrayAdapter {
      */
     private class ViewHolder {
         TextView playListNameText;
+        ImageView playlistHeroImage;
         // TextView albumText;
     }
 
@@ -50,13 +54,14 @@ public class PlaylistListAdapter extends ArrayAdapter {
         if (convertView == null) {
             boolean useList = true;
             if (useList) {
-                viewToUse = mInflater.inflate(R.layout.playlistgriditem, null);
+                viewToUse = mInflater.inflate(R.layout.playlist_card, null);
             } else {
-                viewToUse = mInflater.inflate(R.layout.playlistgriditem, null);
+                viewToUse = mInflater.inflate(R.layout.playlist_card, null);
             }
             // cache the view atrefacts into holder for efficiency
             holder = new ViewHolder();
-            holder.playListNameText = (TextView) viewToUse.findViewById(R.id.playListName);
+            //holder.playListNameText = (TextView) viewToUse.findViewById(R.id.playListName);
+            //holder.playlistHeroImage = (ImageView) viewToUse.findViewById(R.id.playListHeroImage);
             viewToUse.setTag(holder);
         } else {
             viewToUse = convertView;
@@ -64,6 +69,8 @@ public class PlaylistListAdapter extends ArrayAdapter {
         }
 
         holder.playListNameText.setText(item.getPlaylistName());
+        DownloadImageTask imgTask = new DownloadImageTask((holder.playlistHeroImage));
+        imgTask.execute(CommunicationConstants.imagesBaseUrl+item.heroImageUrl);
         return viewToUse;
     }
 }
