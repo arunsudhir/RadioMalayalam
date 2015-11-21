@@ -100,7 +100,7 @@ public class PlaylistProgressExecutor implements AsyncTaskPreAndPostExecutor<Pla
 
     private static String minifyTitle(String title)
     {
-        if(title.length() > 15)
+        if(title.length() > 14)
         {
             return title.substring(0,13) +"...";
         }
