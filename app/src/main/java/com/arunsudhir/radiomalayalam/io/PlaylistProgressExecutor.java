@@ -55,7 +55,7 @@ public class PlaylistProgressExecutor implements AsyncTaskPreAndPostExecutor<Pla
 
             //Create a CardHeader
             CardHeader header = new CardHeader(containingActivity);
-            header.setTitle(item.playlistName);
+            header.setTitle(minifyTitle(item.playlistName));
             //Add Header to cards
             card.addCardHeader(header);
             CardThumbnail ct = new CardThumbnail(containingActivity);
@@ -96,5 +96,14 @@ public class PlaylistProgressExecutor implements AsyncTaskPreAndPostExecutor<Pla
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static String minifyTitle(String title)
+    {
+        if(title.length() > 15)
+        {
+            return title.substring(0,13) +"...";
+        }
+        return title;
     }
 }
