@@ -49,9 +49,9 @@
             android:layout_height="wrap_content"/>
 
         <!-- Main Content View -->
-        <!--style="@style/Birth.card.content_outer_layout" -->
         <FrameLayout
             android:id="@+id/card_main_content_layout"
+            style="@style/Birth.card.content_outer_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

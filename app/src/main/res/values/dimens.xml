@@ -1,6 +1,9 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_horizontal_margin">3dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="carddemo_gplay_grid_columnwidth_card">125dp</dimen>
+    <dimen name="grid_col_width">172dp</dimen>
+    <dimen name="playlist_card_width">170dp</dimen>
 </resources>
