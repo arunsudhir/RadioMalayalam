@@ -14,10 +14,10 @@
     <it.gmariotti.cardslib.library.view.CardGridView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:columnWidth="155dp"
+        android:columnWidth="120dp"
         android:numColumns="auto_fit"
-        android:verticalSpacing="3dp"
-        android:horizontalSpacing="2dp"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="6dp"
         android:stretchMode="columnWidth"
         android:gravity="center"
         card:list_card_layout_resourceID="@layout/cardsgrid_layout_row"
