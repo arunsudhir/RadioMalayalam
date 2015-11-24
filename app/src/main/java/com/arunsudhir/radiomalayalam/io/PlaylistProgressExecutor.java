@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardGridArrayAdapter;
-import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.internal.CardThumbnail;
 import it.gmariotti.cardslib.library.view.CardGridView;
 
@@ -54,10 +53,12 @@ public class PlaylistProgressExecutor implements AsyncTaskPreAndPostExecutor<Pla
             Card card = new Card(containingActivity);
 
             //Create a CardHeader
-            CardHeader header = new CardHeader(containingActivity);
-            header.setTitle(item.playlistName);
+           // CardHeader header = new CardHeader(containingActivity);
+            //header.setTitle(item.playlistName);
             //Add Header to cards
-            card.addCardHeader(header);
+            //card.addCardHeader(header);
+            card.setExpanded(false);
+            card.setTitle(item.playlistName);
             CardThumbnail ct = new CardThumbnail(containingActivity);
             String heroImage = item.getHeroImageUrl();
             if(heroImage != null && !heroImage.isEmpty()) {
