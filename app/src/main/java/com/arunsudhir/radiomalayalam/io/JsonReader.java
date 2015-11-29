@@ -36,7 +36,8 @@ public class JsonReader {
     private JSONObject getJsonResponse(CloseableHttpClient httpClient, String url) throws IOException, JSONException {
         HttpPostHC4 post = new HttpPostHC4(url);
         try (CloseableHttpResponse response = httpClient.execute(post)) {
-            return new JSONObject(getResponseAsString(response));
+            String json = getResponseAsString(response);
+            return new JSONObject(json);
         }
     }
 

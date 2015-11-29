@@ -22,28 +22,26 @@ public class SongReaderAsyncTask extends AsyncTask<String, Integer, List<SongIte
     private static final String SONGS = "songs";
     private static final String SONG = "song";
 
-    private final AsyncTaskPreAndPostExecutor PreExecutor;
+    private final AsyncTaskPreAndPostExecutor<SongItem> preExecutor;
     // Previous value: "http://www.mywimbo.com/MalRadio/getTopListenedSongs.php?year1=2015&language=malayalam"
     private final String url;
 
-    public SongReaderAsyncTask(AsyncTaskPreAndPostExecutor preExecutor, String songsUrl)
-    {
-        PreExecutor = preExecutor;
+    public SongReaderAsyncTask(AsyncTaskPreAndPostExecutor<SongItem> preExecutor, String songsUrl) {
+        this.preExecutor = preExecutor;
         url = songsUrl;
     }
 
     protected void onPreExecute() {
         super.onPreExecute();
-        PreExecutor.PreExecute();
+        preExecutor.PreExecute();
     }
 
     @Override
     protected List<SongItem> doInBackground(String... params) {
-        JSONObject json = JsonReader.getRemoteJsonData(url);
-        try{
-            JSONArray songs = json.getJSONArray(SONGS);
+        try {
+            JSONArray songs = JsonReader.getRemoteJsonData(url).getJSONArray(SONGS);
             List<SongItem> result = new ArrayList<>(songs.length());
-            for(int i=0;i<songs.length();i++){
+            for (int i = 0; i < songs.length(); i++) {
                 JSONObject song = songs.getJSONObject(i);
                 JSONObject songObject = song.getJSONObject(SONG);
                 SongItem currSong = new SongItem();
@@ -58,7 +56,7 @@ public class SongReaderAsyncTask extends AsyncTask<String, Integer, List<SongIte
                 SongContent.ITEM_MAP.put(currSong.songName, currSong);
             }
             return result;
-        }catch(JSONException e){
+        } catch (JSONException e) {
             LOG.error(e, "Failed to parse songs from url '%s'", url);
         }
         return new ArrayList<>();
@@ -67,6 +65,6 @@ public class SongReaderAsyncTask extends AsyncTask<String, Integer, List<SongIte
     @Override
     protected void onPostExecute(List<SongItem> result) {
         super.onPostExecute(result);
-        PreExecutor.PostExecute(result);
+        preExecutor.PostExecute(result);
     }
 }
