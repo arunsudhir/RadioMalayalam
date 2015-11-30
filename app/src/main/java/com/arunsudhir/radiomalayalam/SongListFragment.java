@@ -15,10 +15,9 @@ import com.arunsudhir.radiomalayalam.io.AsyncTaskPreAndPostExecutor;
 import com.arunsudhir.radiomalayalam.io.SongReaderAsyncTask;
 import com.arunsudhir.radiomalayalam.song.SongItem;
 
-
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A list fragment representing a list of Songs. This fragment
@@ -206,7 +205,7 @@ public class SongListFragment extends ListFragment {
         }
 
         @Override
-        public void PostExecute(ArrayList<SongItem> result) {
+        public void PostExecute(List<SongItem> result) {
             pDialog.dismiss();
             ListAdapter adapter = new SongListAdapter(getActivity(), result);
             setListAdapter(adapter);

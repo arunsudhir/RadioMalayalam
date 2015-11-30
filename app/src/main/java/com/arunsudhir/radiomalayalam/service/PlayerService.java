@@ -1,25 +1,21 @@
 package com.arunsudhir.radiomalayalam.service;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.IBinder;
-import android.os.Parcel;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.arunsudhir.radiomalayalam.communication.CommunicationConstants;
+import com.arunsudhir.radiomalayalam.logging.Logger;
 import com.arunsudhir.radiomalayalam.song.SongItem;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 
 /**
@@ -30,7 +26,9 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         MediaPlayer.OnErrorListener,
         MediaPlayer.OnSeekCompleteListener,
         MediaPlayer.OnInfoListener,
-        MediaPlayer.OnBufferingUpdateListener{
+        MediaPlayer.OnBufferingUpdateListener {
+
+    private static final Logger LOG = new Logger(PlayerService.class);
 
     private MediaPlayer _mediaPlayer = new MediaPlayer();
     private String _songUrl;
@@ -40,10 +38,10 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
 
     @Override
     public void onCreate() {
-        NotificationManager mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        NotificationManager mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         // Display a notification about us starting.  We put an icon in the status bar.
-       //mNM.notify("sdsds",12,new Notification(new Parcel()));
+        //mNM.notify("sdsds",12,new Notification(new Parcel()));
         //showNotification();
     }
 
@@ -53,15 +51,12 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         _songUrl = intent.getData().toString();
         _currentSongId = intent.getStringExtra("currentSongId");
 
-        if(_mediaPlayer != null)
-        {
-            if(_mediaPlayer.isPlaying())
-            {
+        if (_mediaPlayer != null) {
+            if (_mediaPlayer.isPlaying()) {
                 _mediaPlayer.stop();
                 _mediaPlayer.reset();
             }
-        }
-        else{
+        } else {
             _mediaPlayer = new MediaPlayer();
         }
         try {
@@ -69,9 +64,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
             _mediaPlayer.prepare();
             _mediaPlayer.setOnCompletionListener(this);
             _mediaPlayer.start();
-        }
-        catch(IOException ex)
-        {
+        } catch (IOException ex) {
             // pass an intent saying that the song wasnt found
         }
 
@@ -80,17 +73,16 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         try {
             FileInputStream fis = openFileInput(CommunicationConstants.CurrentPlaylist);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            _currPlaylist = (ArrayList<SongItem>)ois.readObject();
+            _currPlaylist = (ArrayList<SongItem>) ois.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        catch (Exception e){e.printStackTrace();}
-        for (int i=0; i< _currPlaylist.size(); i++)
-         {
-             if(_currPlaylist.get(i).getId().equals(_currentSongId))
-             {
-                 _currentSongPostion = i;
-                 break;
-             }
-         }
+        for (int i = 0; i < _currPlaylist.size(); i++) {
+            if (_currPlaylist.get(i).getId().equals(_currentSongId)) {
+                _currentSongPostion = i;
+                break;
+            }
+        }
         return START_NOT_STICKY;
     }
 
@@ -127,23 +119,20 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-       _currentSongPostion = (_currentSongPostion + 1) % (_currPlaylist.size());
+        _currentSongPostion = (_currentSongPostion + 1) % (_currPlaylist.size());
         String path = _currPlaylist.get(_currentSongPostion).songPath;
         URI songUri = null;
         try {
             songUri = new URI("http", CommunicationConstants.songsHost, CommunicationConstants.songsRelativeUrl + path, null, null);
-            Log.i("LocalService: songBath",songUri.toString());
+            LOG.info("Playing song: %s", songUri.toString());
             _mediaPlayer.stop();
             _mediaPlayer.reset();
             _mediaPlayer.setDataSource(songUri.toString());
             _mediaPlayer.prepare();
             _mediaPlayer.start();
 
+        } catch (Exception e) {
+            LOG.error(e, "Failed to play song: %s", songUri);
         }
-        catch(Exception e){
-             Log.i("urlPEncPath",songUri.toString());
-        }
-
-
     }
 }

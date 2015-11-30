@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 
 import com.arunsudhir.radiomalayalam.communication.CommunicationConstants;
+import com.arunsudhir.radiomalayalam.logging.Logger;
 import com.arunsudhir.radiomalayalam.service.PlayerService;
 import com.arunsudhir.radiomalayalam.song.SongItem;
 
@@ -31,6 +31,7 @@ import java.net.URI;
  */
 public class SongListActivity extends FragmentActivity
         implements SongListFragment.Callbacks {
+    private static final Logger LOG = new Logger(SongListActivity.class);
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -89,14 +90,12 @@ public class SongListActivity extends FragmentActivity
         //serviceIntent.setComponent(new ComponentName("com.arunsudhir.radiomalayalam.service", "com.arunsudhir.radiomalayalam.service.PlayerService"));
         try {
             URI songUri = new URI("http", CommunicationConstants.songsHost, CommunicationConstants.songsRelativeUrl + songItem.songPath, null, null);
-            Log.i("songBath",songUri.toString());
+            LOG.info("Playing song: %s", songUri.toString());
             serviceIntent.setData(Uri.parse(songUri.toString()));
             serviceIntent.putExtra("currentSongId", songItem.getId());
             startService(serviceIntent);
-        }
-        catch(Exception e)
-        {
-
+        } catch (Exception e) {
+            LOG.error(e, "Failed to play song: %s (@ %s)", songItem.getSongName(), songItem.getSongPath());
         }
     }
 
