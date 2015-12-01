@@ -2,6 +2,7 @@ package com.arunsudhir.radiomalayalam.io;
 
 import android.os.AsyncTask;
 
+import com.arunsudhir.radiomalayalam.logging.Logger;
 import com.arunsudhir.radiomalayalam.song.SongContent;
 import com.arunsudhir.radiomalayalam.song.SongItem;
 
@@ -10,37 +11,37 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Arun on 9/22/2015.
  */
-public class SongReaderAsyncTask extends AsyncTask<String, Integer, ArrayList<SongItem>> {
+public class SongReaderAsyncTask extends AsyncTask<String, Integer, List<SongItem>> {
 
-    ArrayList<SongItem> songsList = new ArrayList<>();
-    String url = "http://www.mywimbo.com/MalRadio/getTopListenedSongs.php?year1=2015&language=malayalam";
-    String SONGS = "songs";
-    String SONG = "song";
-    AsyncTaskPreAndPostExecutor PreExecutor;
+    private static final Logger LOG = new Logger(SongReaderAsyncTask.class);
+    private static final String SONGS = "songs";
+    private static final String SONG = "song";
 
-    public SongReaderAsyncTask(AsyncTaskPreAndPostExecutor preExecutor, String songsUrl)
-    {
-        PreExecutor = preExecutor;
+    private final AsyncTaskPreAndPostExecutor<SongItem> preExecutor;
+    // Previous value: "http://www.mywimbo.com/MalRadio/getTopListenedSongs.php?year1=2015&language=malayalam"
+    private final String url;
+
+    public SongReaderAsyncTask(AsyncTaskPreAndPostExecutor<SongItem> preExecutor, String songsUrl) {
+        this.preExecutor = preExecutor;
         url = songsUrl;
     }
 
     protected void onPreExecute() {
         super.onPreExecute();
-        PreExecutor.PreExecute();
+        preExecutor.PreExecute();
     }
 
     @Override
-    protected ArrayList<SongItem> doInBackground(String... params) {
-
-        JsonReader jParser = new JsonReader();
-        JSONObject json = jParser.getJSONData(url);
-        try{
-            JSONArray songs = json.getJSONArray(SONGS);
-            for(int i=0;i<songs.length();i++){
+    protected List<SongItem> doInBackground(String... params) {
+        try {
+            JSONArray songs = JsonReader.getRemoteJsonData(url).getJSONArray(SONGS);
+            List<SongItem> result = new ArrayList<>(songs.length());
+            for (int i = 0; i < songs.length(); i++) {
                 JSONObject song = songs.getJSONObject(i);
                 JSONObject songObject = song.getJSONObject(SONG);
                 SongItem currSong = new SongItem();
@@ -51,17 +52,19 @@ public class SongReaderAsyncTask extends AsyncTask<String, Integer, ArrayList<So
                 currSong.singer1 = songObject.getString("Singer1");
                 currSong.singer2 = songObject.getString("Singer2");
                 currSong.music = songObject.getString("Music");
-                songsList.add(currSong);
+                result.add(currSong);
                 SongContent.ITEM_MAP.put(currSong.songName, currSong);
             }
-        }catch(JSONException e){
-            e.printStackTrace();
+            return result;
+        } catch (JSONException e) {
+            LOG.error(e, "Failed to parse songs from url '%s'", url);
         }
-        return songsList;
+        return new ArrayList<>();
     }
+
     @Override
-    protected void onPostExecute(ArrayList<SongItem> result) {
+    protected void onPostExecute(List<SongItem> result) {
         super.onPostExecute(result);
-        PreExecutor.PostExecute(result);
+        preExecutor.PostExecute(result);
     }
 }

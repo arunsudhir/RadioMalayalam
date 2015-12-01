@@ -3,17 +3,17 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         config {
-            keyAlias 'RadioMalayalam'
-            keyPassword 'Chinnu123$'
-            storeFile file('C:/Users/Arun/AndroidAppKey.jks')
-            storePassword 'Chinnu123$'
+            keyAlias project.property('signingKeyAlias')
+            keyPassword project.property('signingKeyPassword')
+            storeFile file(project.property('signingStoreFilePath'))
+            storePassword project.property('signingStorePassword')
         }
     }
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
     defaultConfig {
         applicationId "com.arunsudhir.radiomalayalam"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -27,18 +27,30 @@ android {
             debuggable true
         }
     }
+    useLibrary 'org.apache.http.legacy'
+    productFlavors {
+    }
+}
 
-    useLibrary  'org.apache.http.legacy'
+configurations.all {
+    resolutionStrategy {
+        // fail eagerly on version conflict (includes transitive dependencies)
+        // e.g. multiple different versions of the same dependency (group and name are equal)
+        failOnVersionConflict()
+
+        force 'com.android.support:support-v4:23.1.1', 'com.android.support:support-annotations:23.1.1', 'org.apache.httpcomponents:httpclient-android:4.3.5.1'
+    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:23.1.0'
-    compile 'com.android.support:design:23.1.0'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:design:23.1.1'
+    compile 'org.apache.httpcomponents:httpclient-android:4.3.5.1'
+    compile 'com.google.guava:guava:18.0'
     //compile 'com.android.support:cardview-v7:23+'
     //Core card library
     compile 'com.github.gabrielemariotti.cards:cardslib-core:2.1.0'
-
     //Optional for built-in cards
     compile 'com.github.gabrielemariotti.cards:cardslib-cards:2.1.0'
 }

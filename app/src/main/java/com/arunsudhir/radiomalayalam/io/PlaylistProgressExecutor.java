@@ -9,14 +9,17 @@ import android.view.View;
 import com.arunsudhir.radiomalayalam.R;
 import com.arunsudhir.radiomalayalam.SongListActivity;
 import com.arunsudhir.radiomalayalam.communication.CommunicationConstants;
+import com.arunsudhir.radiomalayalam.logging.Logger;
 import com.arunsudhir.radiomalayalam.playlist.PlaylistItem;
 
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardGridArrayAdapter;
+import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.internal.CardThumbnail;
 import it.gmariotti.cardslib.library.view.CardGridView;
 
@@ -25,6 +28,9 @@ import it.gmariotti.cardslib.library.view.CardGridView;
  */
 public class PlaylistProgressExecutor implements AsyncTaskPreAndPostExecutor<PlaylistItem>
 {
+    private static final Logger LOG = new Logger(PlaylistProgressExecutor.class);
+    private static final int MAX_TITLE_LENGTH = 17;
+
     ProgressDialog pDialog;
     Activity containingActivity;
 
@@ -32,6 +38,7 @@ public class PlaylistProgressExecutor implements AsyncTaskPreAndPostExecutor<Pla
     {
         containingActivity = a;
     }
+
     @Override
     public void PreExecute() {
         pDialog = new ProgressDialog(containingActivity);
@@ -42,9 +49,9 @@ public class PlaylistProgressExecutor implements AsyncTaskPreAndPostExecutor<Pla
     }
 
     @Override
-    public void PostExecute(ArrayList<PlaylistItem> result) {
+    public void PostExecute(List<PlaylistItem> result) {
         pDialog.dismiss();
-        ArrayList<Card> cards = new ArrayList<>();
+        List<Card> cards = new ArrayList<>(result.size());
         for(int i=0; i< result.size(); i++)
         {
             final PlaylistItem item = result.get(i);
@@ -53,12 +60,10 @@ public class PlaylistProgressExecutor implements AsyncTaskPreAndPostExecutor<Pla
             Card card = new Card(containingActivity);
 
             //Create a CardHeader
-           // CardHeader header = new CardHeader(containingActivity);
-            //header.setTitle(item.playlistName);
+            CardHeader header = new CardHeader(containingActivity);
+            header.setTitle(minifyTitle(item.playlistName));
             //Add Header to cards
-            //card.addCardHeader(header);
-            card.setExpanded(false);
-            card.setTitle(item.playlistName);
+            card.addCardHeader(header);
             CardThumbnail ct = new CardThumbnail(containingActivity);
             String heroImage = item.getHeroImageUrl();
             if(heroImage != null && !heroImage.isEmpty()) {
@@ -81,21 +86,24 @@ public class PlaylistProgressExecutor implements AsyncTaskPreAndPostExecutor<Pla
         CardGridArrayAdapter mCardArrayAdapter = new CardGridArrayAdapter(containingActivity,cards);
 
         CardGridView gridView = (CardGridView) containingActivity.findViewById(R.id.myGrid);
-        if (gridView!=null){
+        if (gridView != null){
             gridView.setAdapter(mCardArrayAdapter);
         }
 
         //serialize the currentPlaylists onto file
-        FileOutputStream fos;
-        ObjectOutputStream oos;
-
-        try {
-            fos = containingActivity.openFileOutput(CommunicationConstants.CurrentPlaylist, Context.MODE_PRIVATE);
-            oos = new ObjectOutputStream(fos);
-            oos.writeObject(result);
-            oos.close();
+        try (FileOutputStream fos = containingActivity.openFileOutput(CommunicationConstants.CurrentPlaylist, Context.MODE_PRIVATE)) {
+            new ObjectOutputStream(fos).writeObject(result);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e, "Failed to serialized current playlist into file");
         }
+    }
+
+    private static String minifyTitle(String title)
+    {
+        if(title.length() > MAX_TITLE_LENGTH)
+        {
+            return String.format("%s...", title.substring(0,MAX_TITLE_LENGTH-4));
+        }
+        return title;
     }
 }

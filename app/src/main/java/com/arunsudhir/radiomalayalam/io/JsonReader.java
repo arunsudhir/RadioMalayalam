@@ -1,61 +1,47 @@
 package com.arunsudhir.radiomalayalam.io;
 
-import android.util.Log;
+import com.arunsudhir.radiomalayalam.logging.Logger;
+import com.google.common.io.CharStreams;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPostHC4;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 
 /**
- * Created by Arun on 8/26/2015.
+ * Class to read response from a URL as a JSON
  */
 public class JsonReader {
+    private static final Logger LOG = new Logger(JsonReader.class);
+    private static final String RESPONSE_ENCODING = "iso-8859-1";
 
-    static InputStream is = null;
-    static JSONObject jObj = null;
-    static String json = "";
-    public JSONObject getJSONData(String url){
-        try{
-            DefaultHttpClient client = new DefaultHttpClient();
-            HttpPost post = new HttpPost(url);
-            HttpResponse response = client.execute(post);
-            HttpEntity entity = response.getEntity();
-            is = entity.getContent();
-        }catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    is, "iso-8859-1"), 8);
-            StringBuilder sb = new StringBuilder();
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-            is.close();
-            json = sb.toString();
+    public static JSONObject getRemoteJsonData(String url) {
+        return new JsonReader().getJSONData(url);
+    }
+
+    public JSONObject getJSONData(String url) {
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            return getJsonResponse(client, url);
         } catch (Exception e) {
-            Log.e("Buffer Error", "Error converting result " + e.toString());
+            LOG.error(e, "Failed to handle JSON request to URL '%s'", url);
         }
-        try {
-            jObj = new JSONObject(json);
-        } catch (JSONException e) {
-            Log.e("JSON Parser", "Error parsing data " + e.toString());
+        return null;
+    }
+
+    private JSONObject getJsonResponse(CloseableHttpClient httpClient, String url) throws IOException, JSONException {
+        HttpPostHC4 post = new HttpPostHC4(url);
+        try (CloseableHttpResponse response = httpClient.execute(post)) {
+            String json = getResponseAsString(response);
+            return new JSONObject(json);
         }
-        return jObj;
+    }
+
+    private String getResponseAsString(CloseableHttpResponse response) throws IOException {
+        return CharStreams.toString(new InputStreamReader(response.getEntity().getContent(), RESPONSE_ENCODING));
     }
 }

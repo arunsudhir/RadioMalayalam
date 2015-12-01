@@ -1,8 +1,6 @@
 package com.arunsudhir.radiomalayalam.io;
 
-import com.arunsudhir.radiomalayalam.song.SongItem;
-
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Arun on 9/22/2015.
@@ -10,5 +8,5 @@ import java.util.ArrayList;
 public interface AsyncTaskPreAndPostExecutor<T> {
     public void PreExecute();
 
-    public void PostExecute(ArrayList<T> result);
+    public void PostExecute(List<T> result);
 }

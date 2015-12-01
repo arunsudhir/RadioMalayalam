@@ -1,21 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent"
-    android:background="@color/gridBck">
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Sample Text"
-    android:id = "@+id/songName"
-    android:textColor="#2196F3"
-    android:textAppearance="?android:attr/textAppearanceListItem"
-    android:layout_gravity = "center_horizontal" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sample Text"
-        android:id = "@+id/album"
-        android:textAppearance="?android:attr/textAppearanceListItemSecondary" />
+    android:orientation="horizontal"
+    android:layout_height="50dp">
+
+    <ImageView
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:id="@+id/songImage"
+        android:layout_gravity="left|center_vertical"
+        android:padding="10dp"
+        android:background="#ff0000" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sample Text"
+            android:id = "@+id/songName"
+            android:textColor="#2196F3"
+            android:textAppearance="?android:attr/textAppearanceListItem"
+            android:layout_gravity = "center_horizontal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sample Text"
+            android:id = "@+id/album"
+            android:textAppearance="?android:attr/textAppearanceListItemSecondary" />
+    </LinearLayout>
+
 </LinearLayout>
