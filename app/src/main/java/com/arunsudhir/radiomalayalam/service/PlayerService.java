@@ -33,6 +33,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
     private MediaPlayer _mediaPlayer = new MediaPlayer();
     private String _songUrl;
     private String _currentSongId;
+    private String serviceCommand;
     private int _currentSongPostion = -1;
     private ArrayList<SongItem> _currPlaylist = new ArrayList<>();
 
@@ -48,39 +49,56 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("LocalService", "Received start id " + startId + ": " + intent);
-        _songUrl = intent.getData().toString();
-        _currentSongId = intent.getStringExtra("currentSongId");
 
-        if (_mediaPlayer != null) {
-            if (_mediaPlayer.isPlaying()) {
-                _mediaPlayer.stop();
-                _mediaPlayer.reset();
+        serviceCommand = intent.getStringExtra("serviceCommand");
+        if(serviceCommand.equals("play")){
+            _songUrl = intent.getData().toString();
+            _currentSongId = intent.getStringExtra("currentSongId");
+            serviceCommand = intent.getStringExtra("serviceCommand");
+            if (_mediaPlayer != null) {
+                if (_mediaPlayer.isPlaying()) {
+                    _mediaPlayer.stop();
+                    _mediaPlayer.reset();
+                }
+            } else {
+                _mediaPlayer = new MediaPlayer();
             }
-        } else {
-            _mediaPlayer = new MediaPlayer();
-        }
-        try {
-            _mediaPlayer.setDataSource(_songUrl);
-            _mediaPlayer.prepare();
-            _mediaPlayer.setOnCompletionListener(this);
-            _mediaPlayer.start();
-        } catch (IOException ex) {
-            // pass an intent saying that the song wasnt found
-        }
+            try {
+                _mediaPlayer.setDataSource(_songUrl);
+                _mediaPlayer.prepare();
+                _mediaPlayer.setOnCompletionListener(this);
+                _mediaPlayer.start();
+            } catch (IOException ex) {
+                // pass an intent saying that the song wasnt found
+            }
 
-        // now get the current playlist
-        ArrayList<SongItem> currentPlaylist = null;
-        try {
-            FileInputStream fis = openFileInput(CommunicationConstants.CurrentPlaylist);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            _currPlaylist = (ArrayList<SongItem>) ois.readObject();
-        } catch (Exception e) {
-            e.printStackTrace();
+            // now get the current playlist
+            ArrayList<SongItem> currentPlaylist = null;
+            try {
+                FileInputStream fis = openFileInput(CommunicationConstants.CurrentPlaylist);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                _currPlaylist = (ArrayList<SongItem>) ois.readObject();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            for (int i = 0; i < _currPlaylist.size(); i++) {
+                if (_currPlaylist.get(i).getId().equals(_currentSongId)) {
+                    _currentSongPostion = i;
+                    break;
+                }
+            }
         }
-        for (int i = 0; i < _currPlaylist.size(); i++) {
-            if (_currPlaylist.get(i).getId().equals(_currentSongId)) {
-                _currentSongPostion = i;
-                break;
+        else if(serviceCommand.equals("toggle"))
+        {
+            if (_mediaPlayer != null) {
+                if (_mediaPlayer.isPlaying()) {
+                    _mediaPlayer.pause();
+                    //_mediaPlayer.reset();
+                }
+                else if(!_mediaPlayer.isPlaying())
+                {
+                    _mediaPlayer.start();
+                }
             }
         }
         return START_NOT_STICKY;

@@ -1,10 +1,21 @@
 package com.arunsudhir.radiomalayalam;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+
+import com.arunsudhir.radiomalayalam.communication.CommunicationConstants;
+import com.arunsudhir.radiomalayalam.logging.Logger;
+import com.arunsudhir.radiomalayalam.service.PlayerService;
+import com.arunsudhir.radiomalayalam.song.SongItem;
+
+import java.net.URI;
 
 /**
  * An activity representing a single Song detail screen. This
@@ -17,6 +28,7 @@ import android.view.MenuItem;
  */
 public class SongDetailActivity extends FragmentActivity {
 
+    private static final Logger LOG = new Logger(SongDetailActivity.class);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,13 +50,43 @@ public class SongDetailActivity extends FragmentActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(SongDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(SongDetailFragment.ARG_ITEM_ID));
+            arguments.putString(SongDetailFragment.ARG_SONG_NAME,
+                    getIntent().getStringExtra(SongDetailFragment.ARG_SONG_NAME));
+            SongItem songItem = getIntent().getParcelableExtra("songItem");
             SongDetailFragment fragment = new SongDetailFragment();
             fragment.setArguments(arguments);
-           // getFragmentManager().beginTransaction()
-             //       .add(R.id.song_detail_container, fragment)
-               //     .commit();
+            getFragmentManager().beginTransaction()
+                    .add(R.id.song_detail_container, fragment)
+                    .commit();
+
+            ImageButton fabButton = (ImageButton) findViewById(R.id.play_button);
+            final Activity thisActivity = this;
+            fabButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent serviceIntent = new Intent(thisActivity, PlayerService.class);
+                    try {
+                        LOG.info("Toggling play/pause");
+                        serviceIntent.putExtra("serviceCommand", "toggle");
+                        startService(serviceIntent);
+                    } catch (Exception e) {
+                        LOG.error(e, "Failed to toggle state");
+                    }
+                }
+            });
+
+            Intent serviceIntent = new Intent(this, PlayerService.class);
+            //serviceIntent.setComponent(new ComponentName("com.arunsudhir.radiomalayalam.service", "com.arunsudhir.radiomalayalam.service.PlayerService"));
+            try {
+                URI songUri = new URI("http", CommunicationConstants.songsHost, CommunicationConstants.songsRelativeUrl + songItem.songPath, null, null);
+                LOG.info("Playing song: %s", songUri.toString());
+                serviceIntent.setData(Uri.parse(songUri.toString()));
+                serviceIntent.putExtra("currentSongId", songItem.getId());
+                serviceIntent.putExtra("serviceCommand", "play");
+                startService(serviceIntent);
+            } catch (Exception e) {
+                LOG.error(e, "Failed to play song: %s (@ %s)", songItem.getSongName(), songItem.getSongPath());
+            }
         }
     }
 

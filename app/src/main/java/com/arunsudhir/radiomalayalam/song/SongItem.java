@@ -4,12 +4,15 @@ package com.arunsudhir.radiomalayalam.song;
  * Created by Arun on 9/1/2015.
  */
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**
  * An item representing a song
  */
-public class SongItem implements Serializable{
+public class SongItem implements Serializable, Parcelable{
     public String id;
     public String songName;
     public String album;
@@ -84,5 +87,44 @@ public class SongItem implements Serializable{
     @Override
     public String toString() {
         return songName;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(songName);
+        dest.writeString(album);
+        dest.writeString(songPath);
+        dest.writeString(singer1);
+        dest.writeString(singer2);
+        dest.writeString(music);
+
+    }
+
+    // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
+    public static final Parcelable.Creator<SongItem> CREATOR = new Parcelable.Creator<SongItem>() {
+        public SongItem createFromParcel(Parcel in) {
+            return new SongItem(in);
+        }
+
+        public SongItem[] newArray(int size) {
+            return new SongItem[size];
+        }
+    };
+
+    public SongItem(Parcel src)
+    {
+        id = src.readString();
+        songName = src.readString();
+        album = src.readString();
+        songPath = src.readString();
+        singer1 = src.readString();
+        singer2 = src.readString();
+        music = src.readString();
     }
 }

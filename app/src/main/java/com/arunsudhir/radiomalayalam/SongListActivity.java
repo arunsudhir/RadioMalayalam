@@ -3,6 +3,7 @@ package com.arunsudhir.radiomalayalam;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 
 import com.arunsudhir.radiomalayalam.communication.CommunicationConstants;
@@ -67,36 +68,40 @@ public class SongListActivity extends FragmentActivity
      */
     @Override
     public void onItemSelected(SongItem songItem) {
+
+
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
-           /* Bundle arguments = new Bundle();
-            arguments.putString(SongDetailFragment.ARG_ITEM_ID, id);
+            Bundle arguments = new Bundle();
+            arguments.putString(SongDetailFragment.ARG_SONG_NAME, songItem.getSongName());
             SongDetailFragment fragment = new SongDetailFragment();
             fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
+            getFragmentManager().beginTransaction()
                     .replace(R.id.song_detail_container, fragment)
-                    .commit();*/
-
+                    .commit();
+            Intent serviceIntent = new Intent(this, PlayerService.class);
+            //serviceIntent.setComponent(new ComponentName("com.arunsudhir.radiomalayalam.service", "com.arunsudhir.radiomalayalam.service.PlayerService"));
+            try {
+                URI songUri = new URI("http", CommunicationConstants.songsHost, CommunicationConstants.songsRelativeUrl + songItem.songPath, null, null);
+                LOG.info("Playing song: %s", songUri.toString());
+                serviceIntent.setData(Uri.parse(songUri.toString()));
+                serviceIntent.putExtra("currentSongId", songItem.getId());
+                serviceIntent.putExtra("serviceCommand", "play");
+                startService(serviceIntent);
+            } catch (Exception e) {
+                LOG.error(e, "Failed to play song: %s (@ %s)", songItem.getSongName(), songItem.getSongPath());
+            }
         } else {
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
-            /*Intent detailIntent = new Intent(this, SongDetailActivity.class);
-            detailIntent.putExtra(SongDetailFragment.ARG_ITEM_ID, id);
-            startActivity(detailIntent);*/
+            Intent detailIntent = new Intent(this, SongDetailActivity.class);
+            detailIntent.putExtra("songItem", (Parcelable) songItem);
+            detailIntent.putExtra(SongDetailFragment.ARG_SONG_NAME, songItem.getSongName());
+            startActivity(detailIntent);
         }
-        Intent serviceIntent = new Intent(this, PlayerService.class);
-        //serviceIntent.setComponent(new ComponentName("com.arunsudhir.radiomalayalam.service", "com.arunsudhir.radiomalayalam.service.PlayerService"));
-        try {
-            URI songUri = new URI("http", CommunicationConstants.songsHost, CommunicationConstants.songsRelativeUrl + songItem.songPath, null, null);
-            LOG.info("Playing song: %s", songUri.toString());
-            serviceIntent.setData(Uri.parse(songUri.toString()));
-            serviceIntent.putExtra("currentSongId", songItem.getId());
-            startService(serviceIntent);
-        } catch (Exception e) {
-            LOG.error(e, "Failed to play song: %s (@ %s)", songItem.getSongName(), songItem.getSongPath());
-        }
+
     }
 
 }

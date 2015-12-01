@@ -21,5 +21,5 @@ public class SongContent {
     /**
      * A map of sample (dummy) items, by ID.
      */
-    public static Map<String, SongItem> ITEM_MAP = new HashMap<String, SongItem>();
+    public static Map<String, SongItem> ITEM_MAP = new HashMap<>();
 }
