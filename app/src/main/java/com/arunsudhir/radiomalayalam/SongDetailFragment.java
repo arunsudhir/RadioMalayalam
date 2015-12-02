@@ -1,12 +1,16 @@
 package com.arunsudhir.radiomalayalam;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.arunsudhir.radiomalayalam.service.PlayerService;
 import com.arunsudhir.radiomalayalam.song.SongItem;
 
 /**
@@ -57,6 +61,23 @@ public class SongDetailFragment extends Fragment {
         // Show the dummy content as text in a TextView.
         //if (mItem != null) {
             ((TextView) rootView.findViewById(R.id.song_detail)).setText(songname);
+
+        final Activity thisActivity = getActivity();
+        ImageButton fabButton = (ImageButton) rootView.findViewById(R.id.play_button);
+
+        fabButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent serviceIntent = new Intent(thisActivity, PlayerService.class);
+                try {
+                    //LOG.info("Toggling play/pause");
+                    serviceIntent.putExtra("serviceCommand", "toggle");
+                    thisActivity.startService(serviceIntent);
+                } catch (Exception e) {
+                    //LOG.error(e, "Failed to toggle state");
+                }
+            }
+        });
         //}
 
         return rootView;

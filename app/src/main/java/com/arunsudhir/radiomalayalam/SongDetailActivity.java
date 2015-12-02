@@ -59,21 +59,7 @@ public class SongDetailActivity extends FragmentActivity {
                     .add(R.id.song_detail_container, fragment)
                     .commit();
 
-            ImageButton fabButton = (ImageButton) findViewById(R.id.play_button);
-            final Activity thisActivity = this;
-            fabButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent serviceIntent = new Intent(thisActivity, PlayerService.class);
-                    try {
-                        LOG.info("Toggling play/pause");
-                        serviceIntent.putExtra("serviceCommand", "toggle");
-                        startService(serviceIntent);
-                    } catch (Exception e) {
-                        LOG.error(e, "Failed to toggle state");
-                    }
-                }
-            });
+
 
             Intent serviceIntent = new Intent(this, PlayerService.class);
             //serviceIntent.setComponent(new ComponentName("com.arunsudhir.radiomalayalam.service", "com.arunsudhir.radiomalayalam.service.PlayerService"));
