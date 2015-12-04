@@ -23,7 +23,6 @@ public class SongReaderAsyncTask extends AsyncTask<String, Integer, List<SongIte
     private static final String SONG = "song";
 
     private final AsyncTaskPreAndPostExecutor<SongItem> preExecutor;
-    // Previous value: "http://www.mywimbo.com/MalRadio/getTopListenedSongs.php?year1=2015&language=malayalam"
     private final String url;
 
     public SongReaderAsyncTask(AsyncTaskPreAndPostExecutor<SongItem> preExecutor, String songsUrl) {

@@ -1,10 +1,12 @@
 package com.arunsudhir.radiomalayalam;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.app.Activity;
 
@@ -30,6 +32,7 @@ public class SongListAdapter extends ArrayAdapter {
     private class ViewHolder{
         TextView songNameText;
         TextView albumText;
+        ImageView songImage;
     }
 
     /**
@@ -58,6 +61,7 @@ public class SongListAdapter extends ArrayAdapter {
             holder = new ViewHolder();
             holder.songNameText = (TextView)viewToUse.findViewById(R.id.songName);
             holder.albumText = (TextView)viewToUse.findViewById(R.id.album);
+            //holder.songImage = (ImageView)viewToUse.findViewById(R.id.songImage);
             viewToUse.setTag(holder);
         } else {
             viewToUse = convertView;
@@ -66,6 +70,8 @@ public class SongListAdapter extends ArrayAdapter {
 
         holder.songNameText.setText(item.getSongName());
         holder.albumText.setText(item.getAlbum());
+        item.getSongPath().lastIndexOf('/');
+       // holder.songImage.setImageURI(Uri.parse("https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"));
         return viewToUse;
     }
 }

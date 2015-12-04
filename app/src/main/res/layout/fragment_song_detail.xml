@@ -1,28 +1,67 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:orientation="vertical">
 
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:id="@+id/song_detail"
-    style="?android:attr/textAppearanceLarge" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:padding="16dp" android:textIsSelectable="true"
-    tools:context=".SongDetailFragment" />
+    style="?android:attr/textAppearanceLarge" android:layout_width="wrap_content"
+    android:layout_height="wrap_content" android:padding="16dp" android:textIsSelectable="true"
+    tools:context=".SongDetailFragment"
+    android:text="sdsds"/>
 
-<ImageButton
-android:id="@+id/play_button"
-android:layout_width="@dimen/fab_button_diameter"
-android:layout_height="@dimen/fab_button_diameter"
-android:layout_alignParentEnd="true"
-android:layout_alignParentBottom="true"
-android:layout_marginBottom="@dimen/fab_button_margin_bottom"
-android:layout_marginRight="@dimen/fab_button_margin_right"
-android:background="@drawable/fab_ripple"
-android:src="@mipmap/ic_play"
-android:tint="@android:color/white"
-android:elevation="@dimen/elevation_low"
-android:stateListAnimator="@anim/fab_elevation"/>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="100dp"
+    android:orientation="horizontal">
 
- </RelativeLayout>
+    <android.support.design.widget.FloatingActionButton
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:borderWidth="0dp"
+        android:id="@+id/back_button"
+        android:layout_width="@dimen/fab_button_diameter"
+        android:layout_height="@dimen/fab_button_diameter"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/fab_button_margin_bottom"
+        android:layout_marginEnd="@dimen/fab_button_margin_bottom"
+        android:src="@mipmap/ic_play"
+        android:tint="@android:color/white"
+        android:elevation="@dimen/elevation_low"
+        android:stateListAnimator="@anim/fab_elevation"/>
+
+    <android.support.design.widget.FloatingActionButton
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:borderWidth="0dp"
+    android:id="@+id/play_button"
+    android:layout_width="@dimen/fab_button_diameter"
+    android:layout_height="@dimen/fab_button_diameter"
+    android:layout_alignParentEnd="false"
+    android:layout_alignParentBottom="true"
+    android:layout_marginBottom="@dimen/fab_button_margin_bottom"
+    android:layout_marginEnd="@dimen/fab_button_margin_right"
+    android:src="@mipmap/ic_play"
+    android:tint="@android:color/white"
+    android:elevation="@dimen/elevation_low"
+    android:stateListAnimator="@anim/fab_elevation"/>
+
+    <android.support.design.widget.FloatingActionButton
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:borderWidth="0dp"
+        android:id="@+id/fwd_button"
+        android:layout_width="@dimen/fab_button_diameter"
+        android:layout_height="@dimen/fab_button_diameter"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/fab_button_margin_bottom"
+        android:layout_marginEnd="@dimen/fab_button_margin_right"
+        android:src="@mipmap/ic_play"
+        android:tint="@android:color/white"
+        android:elevation="@dimen/elevation_low"
+        android:stateListAnimator="@anim/fab_elevation"/>
+</LinearLayout>
+    </LinearLayout>

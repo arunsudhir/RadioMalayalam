@@ -6,7 +6,7 @@
     <dimen name="carddemo_gplay_grid_columnwidth_card">125dp</dimen>
     <dimen name="grid_col_width">172dp</dimen>
     <dimen name="playlist_card_width">170dp</dimen>
-    <dimen name="fab_button_diameter">100dp</dimen>
+    <dimen name="fab_button_diameter">70dp</dimen>
     <dimen name="fab_button_margin_bottom">16dp</dimen>
     <dimen name="fab_button_margin_right">16dp</dimen>
     <dimen name="elevation_low">2dp</dimen>

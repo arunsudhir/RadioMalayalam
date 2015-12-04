@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,7 @@ public class SongDetailFragment extends Fragment {
             ((TextView) rootView.findViewById(R.id.song_detail)).setText(songname);
 
         final Activity thisActivity = getActivity();
-        ImageButton fabButton = (ImageButton) rootView.findViewById(R.id.play_button);
+        FloatingActionButton fabButton = (FloatingActionButton) rootView.findViewById(R.id.play_button);
 
         fabButton.setOnClickListener(new View.OnClickListener() {
             @Override
