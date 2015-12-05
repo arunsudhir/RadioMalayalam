@@ -101,6 +101,14 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
                 }
             }
         }
+        else if(serviceCommand.equals("skipFwd"))
+        {
+            skipToSong(false);
+        }
+        else if(serviceCommand.equals("skipBck"))
+        {
+            skipToSong(true);
+        }
         return START_NOT_STICKY;
     }
 
@@ -137,7 +145,12 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        _currentSongPostion = (_currentSongPostion + 1) % (_currPlaylist.size());
+        skipToSong(false);
+    }
+
+    private void skipToSong(boolean prev)
+    {
+        _currentSongPostion = (_currentSongPostion + (prev? -1 : 1)) % (_currPlaylist.size());
         String path = _currPlaylist.get(_currentSongPostion).songPath;
         URI songUri = null;
         try {

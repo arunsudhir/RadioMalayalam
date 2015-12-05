@@ -52,6 +52,9 @@ public class SongDetailFragment extends Fragment {
             songname = getArguments().getString(ARG_SONG_NAME);
             //mItem = SongContent.ITEM_MAP.get(getArguments().getString(ARG_SONG_NAME));
         }
+        if(getArguments().containsKey("songItem")){
+            mItem = getArguments().getParcelable("songItem");
+        }
     }
 
     @Override
@@ -60,13 +63,15 @@ public class SongDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_song_detail, container, false);
 
         // Show the dummy content as text in a TextView.
-        //if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.song_detail)).setText(songname);
-
+        if (mItem != null) {
+            ((TextView) rootView.findViewById(R.id.song_name)).setText(mItem.getSongName());
+            ((TextView) rootView.findViewById(R.id.song_album)).setText(mItem.album);
+        }
         final Activity thisActivity = getActivity();
-        FloatingActionButton fabButton = (FloatingActionButton) rootView.findViewById(R.id.play_button);
 
-        fabButton.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton playButton = (FloatingActionButton) rootView.findViewById(R.id.play_button);
+
+        playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent serviceIntent = new Intent(thisActivity, PlayerService.class);
@@ -79,8 +84,38 @@ public class SongDetailFragment extends Fragment {
                 }
             }
         });
-        //}
 
+        FloatingActionButton backButton = (FloatingActionButton) rootView.findViewById(R.id.back_button);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent serviceIntent = new Intent(thisActivity, PlayerService.class);
+                try {
+                    //LOG.info("Toggling play/pause");
+                    serviceIntent.putExtra("serviceCommand", "skipBack");
+                    thisActivity.startService(serviceIntent);
+                } catch (Exception e) {
+                    //LOG.error(e, "Failed to toggle state");
+                }
+            }
+        });
+
+        FloatingActionButton fwdButton = (FloatingActionButton) rootView.findViewById(R.id.fwd_button);
+
+        fwdButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent serviceIntent = new Intent(thisActivity, PlayerService.class);
+                try {
+                    //LOG.info("Toggling play/pause");
+                    serviceIntent.putExtra("serviceCommand", "skipFwd");
+                    thisActivity.startService(serviceIntent);
+                } catch (Exception e) {
+                    //LOG.error(e, "Failed to toggle state");
+                }
+            }
+        });
         return rootView;
     }
 }

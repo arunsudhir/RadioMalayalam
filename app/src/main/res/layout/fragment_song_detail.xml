@@ -1,32 +1,62 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     tools:context=".MainActivity"
     android:background="@android:color/white"
     android:orientation="vertical">
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/song_detail"
-    style="?android:attr/textAppearanceLarge" android:layout_width="wrap_content"
-    android:layout_height="wrap_content" android:padding="16dp" android:textIsSelectable="true"
-    tools:context=".SongDetailFragment"
-    android:text="sdsds"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        tools:context=".MainActivity"
+        android:background="#bb000000"
+        android:orientation="vertical">
+            <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools" android:id="@+id/song_name"
+                style="?android:attr/textAppearanceLarge" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:paddingTop="16dp" android:textIsSelectable="true"
+                android:paddingBottom="16dp"
+                android:layout_gravity="center"
+                tools:context=".SongDetailFragment"
+                android:textSize="25sp"
+                android:textColor="@android:color/primary_text_dark"
+                android:text="sdsds"/>
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginBottom="100dp"
+            <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:textSize="16sp"
+                xmlns:tools="http://schemas.android.com/tools" android:id="@+id/song_album"
+                style="?android:attr/textAppearanceLarge" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:paddingTop="1dp" android:textIsSelectable="true"
+                android:paddingBottom="16dp"
+                android:layout_gravity="center"
+                tools:context=".SongDetailFragment"
+                android:textColor="@android:color/primary_text_dark"
+                android:text="sdsds"/>
+        </LinearLayout>
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_marginBottom="10dp"
+    android:layout_gravity="center_horizontal"
     android:orientation="horizontal">
 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:context=".MainActivity"
+        android:background="@android:color/transparent"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
     <android.support.design.widget.FloatingActionButton
         xmlns:app="http://schemas.android.com/apk/res-auto"
         app:borderWidth="0dp"
         android:id="@+id/back_button"
         android:layout_width="@dimen/fab_button_diameter"
         android:layout_height="@dimen/fab_button_diameter"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/fab_button_margin_bottom"
         android:layout_marginEnd="@dimen/fab_button_margin_bottom"
         android:src="@mipmap/ic_play"
@@ -40,8 +70,6 @@
     android:id="@+id/play_button"
     android:layout_width="@dimen/fab_button_diameter"
     android:layout_height="@dimen/fab_button_diameter"
-    android:layout_alignParentEnd="false"
-    android:layout_alignParentBottom="true"
     android:layout_marginBottom="@dimen/fab_button_margin_bottom"
     android:layout_marginEnd="@dimen/fab_button_margin_right"
     android:src="@mipmap/ic_play"
@@ -55,13 +83,12 @@
         android:id="@+id/fwd_button"
         android:layout_width="@dimen/fab_button_diameter"
         android:layout_height="@dimen/fab_button_diameter"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/fab_button_margin_bottom"
         android:layout_marginEnd="@dimen/fab_button_margin_right"
         android:src="@mipmap/ic_play"
         android:tint="@android:color/white"
         android:elevation="@dimen/elevation_low"
         android:stateListAnimator="@anim/fab_elevation"/>
-</LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
     </LinearLayout>
