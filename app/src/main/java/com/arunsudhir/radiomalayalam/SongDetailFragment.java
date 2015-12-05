@@ -44,16 +44,19 @@ public class SongDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle extras =getActivity().getIntent().getExtras();
+        if(extras != null) {
+            if (extras.containsKey(ARG_SONG_NAME)) {
+                // Load the dummy content specified by the fragment
+                // arguments. In a real-world scenario, use a Loader
+                // to load content from a content provider.
+                songname =extras.getString(ARG_SONG_NAME);
+                //mItem = SongContent.ITEM_MAP.get(getArguments().getString(ARG_SONG_NAME));
+            }
 
-        if (getArguments().containsKey(ARG_SONG_NAME)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            songname = getArguments().getString(ARG_SONG_NAME);
-            //mItem = SongContent.ITEM_MAP.get(getArguments().getString(ARG_SONG_NAME));
-        }
-        if(getArguments().containsKey("songItem")){
-            mItem = getArguments().getParcelable("songItem");
+            if (extras.containsKey("songItem")) {
+                mItem = extras.getParcelable("songItem");
+            }
         }
     }
 
