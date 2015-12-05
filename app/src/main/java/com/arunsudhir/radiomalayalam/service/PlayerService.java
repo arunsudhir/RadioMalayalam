@@ -105,7 +105,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         {
             skipToSong(false);
         }
-        else if(serviceCommand.equals("skipBck"))
+        else if(serviceCommand.equals("skipBack"))
         {
             skipToSong(true);
         }
