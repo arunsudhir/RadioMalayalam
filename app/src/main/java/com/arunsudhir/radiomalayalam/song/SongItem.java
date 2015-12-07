@@ -7,6 +7,8 @@ package com.arunsudhir.radiomalayalam.song;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.arunsudhir.radiomalayalam.communication.CommunicationConstants;
+
 import java.io.Serializable;
 
 /**
@@ -20,6 +22,7 @@ public class SongItem implements Serializable, Parcelable{
     public String singer1;
     public String singer2;
     public String music;
+    public String albumArtPath;
 
     public String getId() {
         return id;
@@ -77,6 +80,14 @@ public class SongItem implements Serializable, Parcelable{
         this.music = music;
     }
 
+    public String getAlbumArtPath() {
+        return CommunicationConstants.baseUrl + songPath.substring(0,songPath.lastIndexOf("/"))+"/AlbumArt.jpg";
+    }
+
+    public void setAlbumArtPath(String path) {
+        this.songPath = path;
+    }
+
 
     public SongItem(){}
 
@@ -103,7 +114,6 @@ public class SongItem implements Serializable, Parcelable{
         dest.writeString(singer1);
         dest.writeString(singer2);
         dest.writeString(music);
-
     }
 
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods

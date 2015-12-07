@@ -4,6 +4,7 @@
     android:layout_height="fill_parent"
     tools:context=".MainActivity"
     android:background="@android:color/white"
+    android:id="@+id/song_albumart"
     android:orientation="vertical">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -59,7 +60,8 @@
         android:layout_height="@dimen/fab_button_diameter"
         android:layout_marginBottom="@dimen/fab_button_margin_bottom"
         android:layout_marginEnd="@dimen/fab_button_margin_bottom"
-        android:src="@mipmap/ic_play"
+        android:src="@android:drawable/ic_media_rew"
+        android:backgroundTint="@color/GoodOrange"
         android:tint="@android:color/white"
         android:elevation="@dimen/elevation_low"
         android:stateListAnimator="@anim/fab_elevation"/>
@@ -72,7 +74,8 @@
     android:layout_height="@dimen/fab_button_diameter"
     android:layout_marginBottom="@dimen/fab_button_margin_bottom"
     android:layout_marginEnd="@dimen/fab_button_margin_right"
-    android:src="@mipmap/ic_play"
+    android:src="@android:drawable/ic_media_play"
+    android:backgroundTint="@color/GoodOrange"
     android:tint="@android:color/white"
     android:elevation="@dimen/elevation_low"
     android:stateListAnimator="@anim/fab_elevation"/>
@@ -85,7 +88,8 @@
         android:layout_height="@dimen/fab_button_diameter"
         android:layout_marginBottom="@dimen/fab_button_margin_bottom"
         android:layout_marginEnd="@dimen/fab_button_margin_right"
-        android:src="@mipmap/ic_play"
+        android:backgroundTint="@color/GoodOrange"
+        android:src="@android:drawable/ic_media_ff"
         android:tint="@android:color/white"
         android:elevation="@dimen/elevation_low"
         android:stateListAnimator="@anim/fab_elevation"/>
