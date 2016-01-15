@@ -8,7 +8,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:theme="@style/AppTheme.AppBarOverlay"
     android:paddingLeft="16dp"
-    android:touchscreenBlocksFocus="true">
+    android:touchscreenBlocksFocus="true"
+    >
 
     <TextView
         android:layout_width="wrap_content"
@@ -17,7 +18,8 @@
         android:text="EPIC FAIL!"
         android:textColor="@color/colorPrimary"
         android:paddingTop="16dp"
-        android:id="@+id/textView" />
+        android:id="@+id/textView"
+    />
 
     <TextView
         android:layout_width="wrap_content"
@@ -28,13 +30,15 @@
         android:paddingBottom="16dp"
         android:textSize="14dp"
         android:layout_gravity="center_horizontal"
-        android:id="@+id/textViewNotConnected" />
+        android:id="@+id/textViewNotConnected"
+    />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Try Again"
-        android:id="@+id/buttonTryAgain"
+        android:id="@+id/button_try_again"
         android:background="@color/colorPrimary"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+    />
 </LinearLayout>
