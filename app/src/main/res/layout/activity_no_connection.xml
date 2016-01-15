@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentStart="true"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:theme="@style/AppTheme.AppBarOverlay"
+    android:paddingLeft="16dp"
+    android:touchscreenBlocksFocus="true">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="EPIC FAIL!"
+        android:textColor="@color/colorPrimary"
+        android:paddingTop="16dp"
+        android:id="@+id/textView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Internet radio needs ....among other things.. internet. Blame it on your mobile carrier or a lame WiFi .. ! "
+        android:textAllCaps="true"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:textSize="14dp"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/textViewNotConnected" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Try Again"
+        android:id="@+id/buttonTryAgain"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white" />
+</LinearLayout>
