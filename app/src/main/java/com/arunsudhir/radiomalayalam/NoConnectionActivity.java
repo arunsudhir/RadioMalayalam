@@ -20,7 +20,7 @@ public class NoConnectionActivity extends AppCompatActivity {
         buttonTryAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent playListIntent = new Intent(noConnectionActivity, PlayListActivity.class);
+                Intent playListIntent = new Intent(noConnectionActivity,  PlayListActivity.class);
                 try {
                         startActivity(playListIntent);
                 } catch (Exception e) {
