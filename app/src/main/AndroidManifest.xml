@@ -8,6 +8,15 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:theme="@style/AppTheme" >
+
+        <receiver android:name=".SongDetailActivity$ServiceReciever">
+            <intent-filter>
+                <action android:name="com.arunsudhir.radiomalayalam.PLAYER">
+                </action>
+            </intent-filter>
+
+        </receiver>
+
         <activity
             android:name=".SongListActivity"
             android:label="@string/title_song_list" >

@@ -1,6 +1,8 @@
 package com.arunsudhir.radiomalayalam;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -105,5 +107,14 @@ public class SongDetailActivity extends FragmentActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public class ServiceReciever extends BroadcastReceiver
+    {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            SongItem songItem = getIntent().getParcelableExtra("currentSong");
+        }
     }
 }
