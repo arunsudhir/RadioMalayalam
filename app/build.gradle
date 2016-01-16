@@ -44,4 +44,6 @@ dependencies {
     compile 'com.github.gabrielemariotti.cards:cardslib-core:2.1.0'
     //Optional for built-in cards
     compile 'com.github.gabrielemariotti.cards:cardslib-cards:2.1.0'
+    //Admob
+    compile 'com.google.android.gms:play-services-ads:8.3.0'
 }
