@@ -38,7 +38,7 @@ public class SongReaderAsyncTask extends AsyncTask<String, Integer, List<SongIte
     @Override
     protected List<SongItem> doInBackground(String... params) {
         try {
-            JSONArray songs = JsonReader.getRemoteJsonData(url).getJSONArray(SONGS);
+            JSONArray songs = new JsonReader(preExecutor).getRemoteJsonData(url).getJSONArray(SONGS);
             List<SongItem> result = new ArrayList<>(songs.length());
             for (int i = 0; i < songs.length(); i++) {
                 JSONObject song = songs.getJSONObject(i);

@@ -223,6 +223,16 @@ public class SongListFragment extends ListFragment {
                 e.printStackTrace();
             }
         }
+
+        @Override
+        public Activity getContainingActivity() {
+            return getActivity();
+        }
+
+        @Override
+        public ProgressDialog getProgressDialog() {
+            return pDialog;
+        }
     }
 
 }

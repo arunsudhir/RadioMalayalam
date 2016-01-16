@@ -38,23 +38,25 @@ public class PlaylistReaderAsyncTask extends AsyncTask<String, Integer, List<Pla
 
     @Override
     protected List<PlaylistItem> doInBackground(String... params) {
-        JSONObject json = JsonReader.getRemoteJsonData(URL);
-        try {
-            JSONArray playlists = json.getJSONArray(PLAYLISTS);
-            List<PlaylistItem> playlistItems = new ArrayList<>(playlists.length());
-            for (int i = 0; i < playlists.length(); i++) {
-                JSONObject playlist = playlists.getJSONObject(i);
-                JSONObject plObject = playlist.getJSONObject(PLAYLIST);
-                PlaylistItem currPlaylist = new PlaylistItem();
-                currPlaylist.playlistName = plObject.getString("Name");
-                currPlaylist.url = plObject.getString("URL");
-                currPlaylist.heroImageUrl = CommunicationConstants.imagesBaseUrl + plObject.getString("heroImage");
-                playlistItems.add(currPlaylist);
-                // SongContent.ITEM_MAP.put(currSong.songName, currSong);
+        JSONObject json = new JsonReader(preExecutor).getRemoteJsonData(URL);
+        if(json !=null) {
+            try {
+                JSONArray playlists = json.getJSONArray(PLAYLISTS);
+                List<PlaylistItem> playlistItems = new ArrayList<>(playlists.length());
+                for (int i = 0; i < playlists.length(); i++) {
+                    JSONObject playlist = playlists.getJSONObject(i);
+                    JSONObject plObject = playlist.getJSONObject(PLAYLIST);
+                    PlaylistItem currPlaylist = new PlaylistItem();
+                    currPlaylist.playlistName = plObject.getString("Name");
+                    currPlaylist.url = plObject.getString("URL");
+                    currPlaylist.heroImageUrl = CommunicationConstants.imagesBaseUrl + plObject.getString("heroImage");
+                    playlistItems.add(currPlaylist);
+                    // SongContent.ITEM_MAP.put(currSong.songName, currSong);
+                }
+                return playlistItems;
+            } catch (JSONException e) {
+                LOG.error(e, "Failed to retrieve playlist");
             }
-            return playlistItems;
-        } catch (JSONException e) {
-            LOG.error(e, "Failed to retrieve playlist");
         }
         return new ArrayList<>();
     }

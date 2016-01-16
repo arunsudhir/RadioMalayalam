@@ -1,5 +1,10 @@
 package com.arunsudhir.radiomalayalam.io;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+
+import com.arunsudhir.radiomalayalam.NoConnectionActivity;
 import com.arunsudhir.radiomalayalam.logging.Logger;
 import com.google.common.io.CharStreams;
 
@@ -19,16 +24,30 @@ import java.io.InputStreamReader;
 public class JsonReader {
     private static final Logger LOG = new Logger(JsonReader.class);
     private static final String RESPONSE_ENCODING = "iso-8859-1";
-
-    public static JSONObject getRemoteJsonData(String url) {
-        return new JsonReader().getJSONData(url);
+    private Activity containingActivity;
+    private ProgressDialog pDialog;
+    public JsonReader(AsyncTaskPreAndPostExecutor executor)
+    {
+        this.containingActivity = executor.getContainingActivity();
+        this.pDialog = executor.getProgressDialog();
     }
 
-    public JSONObject getJSONData(String url) {
+    public JSONObject getRemoteJsonData(String url) {
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             return getJsonResponse(client, url);
-        } catch (Exception e) {
+        }
+        // indicates that JSON Failed. Load the no internet activity
+        catch (Exception e) {
             LOG.error(e, "Failed to handle JSON request to URL '%s'", url);
+
+            //dismiss a progress dialog if it exists
+            if(pDialog !=null)
+            {
+                pDialog.dismiss();
+            }
+
+            Intent noInternetIntent = new Intent(containingActivity, NoConnectionActivity.class);
+            containingActivity.startActivity(noInternetIntent);
         }
         return null;
     }

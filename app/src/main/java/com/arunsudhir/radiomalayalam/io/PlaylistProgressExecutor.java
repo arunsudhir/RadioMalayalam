@@ -98,6 +98,16 @@ public class PlaylistProgressExecutor implements AsyncTaskPreAndPostExecutor<Pla
         }
     }
 
+    @Override
+    public Activity getContainingActivity() {
+        return containingActivity;
+    }
+
+    @Override
+    public ProgressDialog getProgressDialog() {
+        return pDialog;
+    }
+
     private static String minifyTitle(String title)
     {
         if(title.length() > MAX_TITLE_LENGTH)

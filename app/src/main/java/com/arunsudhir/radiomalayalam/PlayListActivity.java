@@ -15,12 +15,7 @@ public class PlayListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_play_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        try {
-            new PlaylistReaderAsyncTask(new PlaylistProgressExecutor(this)).execute();
-        }
-        catch(java.net.ConnectException c)
-        {
-            setContentView(R.layout.activity_no_connection);
-        }
+        new PlaylistReaderAsyncTask(new PlaylistProgressExecutor(this)).execute();
+        setContentView(R.layout.activity_no_connection);
     }
 }

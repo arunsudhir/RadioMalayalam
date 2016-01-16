@@ -1,6 +1,9 @@
 .gradle
 /local.properties
 /.idea/workspace.xml
+/.idea/gradle.xml
+app.iml
+RadioMalayalam.iml
 /.idea/libraries
 .DS_Store
 /build
