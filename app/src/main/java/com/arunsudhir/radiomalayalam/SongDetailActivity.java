@@ -1,16 +1,14 @@
 package com.arunsudhir.radiomalayalam;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageButton;
 
 import com.arunsudhir.radiomalayalam.communication.CommunicationConstants;
 import com.arunsudhir.radiomalayalam.logging.Logger;
@@ -102,5 +100,13 @@ public class SongDetailActivity extends FragmentActivity {
         public void onReceive(Context context, Intent intent) {
             SongItem songItem = getIntent().getParcelableExtra("currentSong");
         }
+    }
+
+    @Override
+    protected void onResume() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(SendBroadcast.BROADCAST_ACTION);
+        registerReceiver(receiver, filter);
+        super.onResume();
     }
 }

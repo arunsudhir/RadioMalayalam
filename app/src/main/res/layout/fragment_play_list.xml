@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:card="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="fill_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -12,6 +12,13 @@
     tools:showIn="@layout/activity_play_list"
     tools:context="com.arunsudhir.radiomalayalam.PlayListActivityFragment">
 
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ScrollView01"
+        android:layout_above="@+id/adView"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical">
 
     <it.gmariotti.cardslib.library.view.CardGridView
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -26,6 +33,8 @@
         android:gravity="center"
         card:list_card_layout_resourceID="@layout/cardsgrid_layout_row"
         android:id="@+id/myGrid"/>
+
+    </ScrollView>
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
