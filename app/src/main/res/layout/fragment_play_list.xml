@@ -12,19 +12,20 @@
     tools:showIn="@layout/activity_play_list"
     tools:context="com.arunsudhir.radiomalayalam.PlayListActivityFragment">
 
-    <ScrollView
+    <!-- <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/ScrollView01"
         android:layout_above="@+id/adView"
         android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical">
+        android:layout_height="fill_parent"
+        android:scrollbars="vertical"> -->
 
     <it.gmariotti.cardslib.library.view.CardGridView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/adView"
         android:columnWidth="@dimen/grid_col_width"
         android:numColumns="auto_fit"
         android:verticalSpacing="3dp"
@@ -34,8 +35,7 @@
         card:list_card_layout_resourceID="@layout/cardsgrid_layout_row"
         android:id="@+id/myGrid"/>
 
-    </ScrollView>
-
+    <!--</ScrollView> -->
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="wrap_content"
@@ -43,7 +43,7 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         app:adSize="BANNER"
-        app:adUnitId="@string/banner_ad_unit_id">
+        app:adUnitId="@string/playlist_banner_ad_unit_id">
     </com.google.android.gms.ads.AdView>
 
 </RelativeLayout>
