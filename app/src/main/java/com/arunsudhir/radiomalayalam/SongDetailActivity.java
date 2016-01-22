@@ -1,21 +1,26 @@
 package com.arunsudhir.radiomalayalam;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.arunsudhir.radiomalayalam.communication.CommunicationConstants;
+import com.arunsudhir.radiomalayalam.communication.DownloadImageTask;
 import com.arunsudhir.radiomalayalam.logging.Logger;
 import com.arunsudhir.radiomalayalam.service.PlayerService;
 import com.arunsudhir.radiomalayalam.song.SongItem;
+import com.google.common.base.Function;
 
 import java.net.URI;
 
@@ -31,6 +36,7 @@ import java.net.URI;
 public class SongDetailActivity extends FragmentActivity {
 
     private static final Logger LOG = new Logger(SongDetailActivity.class);
+    private final ServiceReciever receiver = new ServiceReciever();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +107,40 @@ public class SongDetailActivity extends FragmentActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             SongItem songItem = getIntent().getParcelableExtra("currentSong");
+            if (songItem != null) {
+                ((TextView) findViewById(R.id.song_name)).setText(songItem.getSongName());
+                ((TextView) findViewById(R.id.song_album)).setText(songItem.album);
+
+                Function<Bitmap,LinearLayout> changeBack = new Function<Bitmap, LinearLayout>() {
+                    @Override
+                    public LinearLayout apply(Bitmap input) {
+                            LinearLayout view = ((LinearLayout) findViewById(R.id.song_albumart));
+                            view.setBackground(new BitmapDrawable(input));
+                            return view;
+                    }
+                };
+
+                Bitmap icon = BitmapFactory.decodeResource(getResources(),
+                        R.mipmap.ic_song_icon);
+                DownloadImageTask<LinearLayout> albumArtTask = new DownloadImageTask<LinearLayout>(changeBack, icon);
+                albumArtTask.execute(songItem.getAlbumArtPath().replace(" ", "%20"));
+            }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.arunsudhir.radiomalayalam.PLAYER");
+        registerReceiver(receiver, filter);
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        if(receiver != null)
+            unregisterReceiver(receiver);
+        super.onPause();
     }
 }

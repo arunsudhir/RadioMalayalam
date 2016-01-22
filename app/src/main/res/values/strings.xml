@@ -5,6 +5,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_playlist_card">PlaylistCardActivity</string>
-    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="playlist_banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="songslist_banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="songdetail_banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 
 </resources>
