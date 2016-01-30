@@ -2,7 +2,6 @@ package com.arunsudhir.radiomalayalam;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -12,11 +11,10 @@ import android.widget.ListView;
 
 import com.arunsudhir.radiomalayalam.communication.CommunicationConstants;
 import com.arunsudhir.radiomalayalam.io.AsyncTaskPreAndPostExecutor;
+import com.arunsudhir.radiomalayalam.io.PlayerStateKeeper;
 import com.arunsudhir.radiomalayalam.io.SongReaderAsyncTask;
 import com.arunsudhir.radiomalayalam.song.SongItem;
 
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
 import java.util.List;
 
 /**
@@ -157,6 +155,7 @@ public class SongListFragment extends ListFragment {
         // fragment is attached to one) that an item has been selected.
        // mCallbacks = sDummyCallbacks;
        SongItem selectedItem = (SongItem) listView.getItemAtPosition(position);
+        PlayerStateKeeper.WriteCurrentSongIndex(getActivity(),position);
         mCallbacks.onItemSelected(selectedItem); //SongContent.ITEMS.get(position).id
     }
 
@@ -211,17 +210,7 @@ public class SongListFragment extends ListFragment {
             setListAdapter(adapter);
 
             //serialize the currentPlaylist onto file
-            FileOutputStream fos;
-            ObjectOutputStream oos;
-
-            try {
-                fos = getActivity().openFileOutput(CommunicationConstants.CurrentPlaylist, Context.MODE_PRIVATE);
-                oos = new ObjectOutputStream(fos);
-                oos.writeObject(result);
-                oos.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            PlayerStateKeeper.WriteCurrentPlaylist(getActivity(), result);
         }
 
         @Override

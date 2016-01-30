@@ -15,9 +15,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.arunsudhir.radiomalayalam.communication.DownloadImageTask;
+import com.arunsudhir.radiomalayalam.io.PlayerStateKeeper;
 import com.arunsudhir.radiomalayalam.service.PlayerService;
 import com.arunsudhir.radiomalayalam.song.SongItem;
 import com.google.common.base.Function;
+
+import java.util.ArrayList;
 
 /**
  * A fragment representing a single Song detail screen.
@@ -39,7 +42,7 @@ public class SongDetailFragment extends Fragment {
     private String songname;
     private boolean _paused = false;
     View _rootView;
-
+    private Bitmap _backupIcon;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -52,6 +55,8 @@ public class SongDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        _backupIcon = BitmapFactory.decodeResource(getResources(),
+                R.mipmap.ic_song_icon);
         Bundle extras =getActivity().getIntent().getExtras();
         if(extras != null) {
             if (extras.containsKey(ARG_SONG_NAME)) {
@@ -85,28 +90,8 @@ public class SongDetailFragment extends Fragment {
         _rootView = inflater.inflate(R.layout.fragment_song_detail, container, false);
 
         // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView) _rootView.findViewById(R.id.song_name)).setText(mItem.getSongName());
-            ((TextView) _rootView.findViewById(R.id.song_album)).setText(mItem.album);
 
-            Function<Bitmap,LinearLayout> changeBack = new Function<Bitmap, LinearLayout>() {
-                @Override
-                public LinearLayout apply(Bitmap input) {
-                    if(_rootView != null)
-                    {
-                        LinearLayout view = ((LinearLayout) _rootView.findViewById(R.id.song_albumart));
-                        view.setBackground(new BitmapDrawable(input));
-                        return view;
-                    }
-                    return null;
-                }
-            };
-
-            Bitmap icon = BitmapFactory.decodeResource(getResources(),
-                    R.mipmap.ic_song_icon);
-            DownloadImageTask<LinearLayout> albumArtTask = new DownloadImageTask<LinearLayout>(changeBack, icon);
-            albumArtTask.execute(mItem.getAlbumArtPath().replace(" ", "%20"));
-        }
+        updateViewAndAlbumArtFromSongItem(mItem, _rootView, _backupIcon);
         final Activity thisActivity = getActivity();
 
         final FloatingActionButton playButton = (FloatingActionButton) _rootView.findViewById(R.id.play_button);
@@ -129,6 +114,7 @@ public class SongDetailFragment extends Fragment {
                         _paused = true;
                     }
                     serviceIntent.putExtra("serviceCommand", "toggle");
+
                     thisActivity.startService(serviceIntent);
                 } catch (Exception e) {
                     //LOG.error(e, "Failed to toggle state");
@@ -141,6 +127,10 @@ public class SongDetailFragment extends Fragment {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ArrayList<SongItem> playlist = PlayerStateKeeper.ReadCurrentPlaylist(thisActivity);
+                int songIndex = PlayerStateKeeper.ReadCurrentSongIndex(thisActivity);
+                songIndex = (songIndex -1) % (playlist.size());
+                updateViewAndAlbumArtFromSongItem(playlist.get(songIndex), thisActivity.findViewById(android.R.id.content), _backupIcon);
                 Intent serviceIntent = new Intent(thisActivity, PlayerService.class);
                 try {
                     //LOG.info("Toggling play/pause");
@@ -157,6 +147,10 @@ public class SongDetailFragment extends Fragment {
         fwdButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ArrayList<SongItem> playlist = PlayerStateKeeper.ReadCurrentPlaylist(thisActivity);
+                int songIndex = PlayerStateKeeper.ReadCurrentSongIndex(thisActivity);
+                songIndex = (songIndex + 1) % (playlist.size());
+                updateViewAndAlbumArtFromSongItem(playlist.get(songIndex), thisActivity.findViewById(android.R.id.content), _backupIcon);
                 Intent serviceIntent = new Intent(thisActivity, PlayerService.class);
                 try {
                     //LOG.info("Toggling play/pause");
@@ -168,5 +162,28 @@ public class SongDetailFragment extends Fragment {
             }
         });
         return _rootView;
+    }
+
+    static void updateViewAndAlbumArtFromSongItem(SongItem mItem, final View rootView, Bitmap icon)
+    {
+        if (mItem != null) {
+            ((TextView) rootView.findViewById(R.id.song_name)).setText(mItem.getSongName());
+            ((TextView) rootView.findViewById(R.id.song_album)).setText(mItem.album);
+
+            Function<Bitmap,LinearLayout> changeBack = new Function<Bitmap, LinearLayout>() {
+                @Override
+                public LinearLayout apply(Bitmap input) {
+                    if(rootView != null)
+                    {
+                        LinearLayout view = ((LinearLayout) rootView.findViewById(R.id.song_albumart));
+                        view.setBackground(new BitmapDrawable(input));
+                        return view;
+                    }
+                    return null;
+                }
+            };
+            DownloadImageTask<LinearLayout> albumArtTask = new DownloadImageTask<LinearLayout>(changeBack, icon);
+            albumArtTask.execute(mItem.getAlbumArtPath().replace(" ", "%20"));
+        }
     }
 }
