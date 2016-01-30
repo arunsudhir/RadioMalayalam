@@ -18,10 +18,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".SongListActivity" />
-            <intent-filter>
-                <action android:name="com.arunsudhir.radiomalayalam.PLAYER">
-                </action>
-            </intent-filter>
         </activity>
 
         <service

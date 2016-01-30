@@ -17,12 +17,14 @@ import android.widget.TextView;
 
 import com.arunsudhir.radiomalayalam.communication.CommunicationConstants;
 import com.arunsudhir.radiomalayalam.communication.DownloadImageTask;
+import com.arunsudhir.radiomalayalam.io.PlayerStateKeeper;
 import com.arunsudhir.radiomalayalam.logging.Logger;
 import com.arunsudhir.radiomalayalam.service.PlayerService;
 import com.arunsudhir.radiomalayalam.song.SongItem;
 import com.google.common.base.Function;
 
 import java.net.URI;
+import java.util.ArrayList;
 
 /**
  * An activity representing a single Song detail screen. This
@@ -81,6 +83,9 @@ public class SongDetailActivity extends FragmentActivity {
             } catch (Exception e) {
                 LOG.error(e, "Failed to play song: %s (@ %s)", songItem.getSongName(), songItem.getSongPath());
             }
+            IntentFilter filter = new IntentFilter();
+            filter.addAction("com.arunsudhir.radiomalayalam.PLAYER");
+            registerReceiver(receiver, filter);
         }
     }
 
@@ -130,17 +135,18 @@ public class SongDetailActivity extends FragmentActivity {
 
     @Override
     protected void onResume() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("com.arunsudhir.radiomalayalam.PLAYER");
-        registerReceiver(receiver, filter);
+        ArrayList<SongItem> playlist = PlayerStateKeeper.ReadCurrentPlaylist(this);
+        int songIndex = PlayerStateKeeper.ReadCurrentSongIndex(this);
+        Bitmap backupIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_song_icon);
+        SongDetailFragment.updateViewAndAlbumArtFromSongItem(playlist.get(songIndex), findViewById(android.R.id.content), backupIcon);
         super.onResume();
     }
 
-    @Override
+    /*@Override
     protected void onPause()
     {
         if(receiver != null)
             unregisterReceiver(receiver);
         super.onPause();
-    }
+    }*/
 }

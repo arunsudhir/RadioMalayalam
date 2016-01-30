@@ -9,12 +9,11 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.arunsudhir.radiomalayalam.communication.CommunicationConstants;
+import com.arunsudhir.radiomalayalam.io.PlayerStateKeeper;
 import com.arunsudhir.radiomalayalam.logging.Logger;
 import com.arunsudhir.radiomalayalam.song.SongItem;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.URI;
 import java.util.ArrayList;
 
@@ -73,14 +72,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
             }
 
             // now get the current playlist
-            ArrayList<SongItem> currentPlaylist = null;
-            try {
-                FileInputStream fis = openFileInput(CommunicationConstants.CurrentPlaylist);
-                ObjectInputStream ois = new ObjectInputStream(fis);
-                _currPlaylist = (ArrayList<SongItem>) ois.readObject();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            _currPlaylist = PlayerStateKeeper.ReadCurrentPlaylist(this);
             for (int i = 0; i < _currPlaylist.size(); i++) {
                 if (_currPlaylist.get(i).getId().equals(_currentSongId)) {
                     _currentSongPostion = i;
@@ -161,15 +153,16 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
             _mediaPlayer.setDataSource(songUri.toString());
             _mediaPlayer.prepare();
             _mediaPlayer.start();
-            broadcastIntent();
+            updatePlayerState();
 
         } catch (Exception e) {
             LOG.error(e, "Failed to play song: %s", songUri);
         }
     }
 
-    public void broadcastIntent()
+    public void updatePlayerState()
     {
+        PlayerStateKeeper.WriteCurrentSongIndex(this, _currentSongPostion);
         Intent intent = new Intent();
         intent.setAction("com.arunsudhir.radiomalayalam.PLAYER");
         intent.putExtra("currentSong", (Parcelable)_currPlaylist.get(_currentSongPostion));
