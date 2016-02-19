@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.arunsudhir.radiomalayalam.communication.CommunicationConstants;
 import com.arunsudhir.radiomalayalam.communication.DownloadImageTask;
+import com.arunsudhir.radiomalayalam.exception.GlobalExceptionHandler;
 import com.arunsudhir.radiomalayalam.io.PlayerStateKeeper;
 import com.arunsudhir.radiomalayalam.logging.Logger;
 import com.arunsudhir.radiomalayalam.service.PlayerService;
@@ -42,6 +43,7 @@ public class SongDetailActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Thread.setDefaultUncaughtExceptionHandler(new GlobalExceptionHandler(Thread.getDefaultUncaughtExceptionHandler(), this));
         setContentView(R.layout.activity_song_detail);
 
         // Show the Up button in the action bar.

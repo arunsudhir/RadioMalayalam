@@ -7,6 +7,7 @@ import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 
 import com.arunsudhir.radiomalayalam.communication.CommunicationConstants;
+import com.arunsudhir.radiomalayalam.exception.GlobalExceptionHandler;
 import com.arunsudhir.radiomalayalam.logging.Logger;
 import com.arunsudhir.radiomalayalam.service.PlayerService;
 import com.arunsudhir.radiomalayalam.song.SongItem;
@@ -43,6 +44,7 @@ public class SongListActivity extends FragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Thread.setDefaultUncaughtExceptionHandler(new GlobalExceptionHandler(Thread.getDefaultUncaughtExceptionHandler(), this));
         setContentView(R.layout.activity_song_list);
 
         if (findViewById(R.id.song_detail_container) != null) {
