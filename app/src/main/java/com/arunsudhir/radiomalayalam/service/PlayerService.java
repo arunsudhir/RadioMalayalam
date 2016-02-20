@@ -55,10 +55,10 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
             _currentSongId = intent.getStringExtra("currentSongId");
             serviceCommand = intent.getStringExtra("serviceCommand");
             if (_mediaPlayer != null) {
-                if (_mediaPlayer.isPlaying()) {
+               // if (_mediaPlayer.isPlaying() || _mediaPlayer.isLooping()) {
                     _mediaPlayer.stop();
                     _mediaPlayer.reset();
-                }
+                //}
             } else {
                 _mediaPlayer = new MediaPlayer();
             }
