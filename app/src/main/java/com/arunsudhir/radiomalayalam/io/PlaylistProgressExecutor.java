@@ -4,6 +4,11 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.arunsudhir.radiomalayalam.R;
@@ -67,7 +72,7 @@ public class PlaylistProgressExecutor implements AsyncTaskPreAndPostExecutor<Pla
             CardThumbnail ct = new CardThumbnail(containingActivity);
             String heroImage = item.getHeroImageUrl();
             if(heroImage != null && !heroImage.isEmpty()) {
-                ct.setUrlResource(item.getHeroImageUrl());
+                ct.setUrlResource(heroImage);
             }
             card.addCardThumbnail(ct);
             card.setClickable(true);
