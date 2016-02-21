@@ -39,7 +39,7 @@ import java.util.ArrayList;
 public class SongDetailActivity extends FragmentActivity {
 
     private static final Logger LOG = new Logger(SongDetailActivity.class);
-    private final ServiceReciever receiver = new ServiceReciever();
+    //private final ServiceReciever receiver = new ServiceReciever();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,9 +85,9 @@ public class SongDetailActivity extends FragmentActivity {
             } catch (Exception e) {
                 LOG.error(e, "Failed to play song: %s (@ %s)", songItem.getSongName(), songItem.getSongPath());
             }
-            IntentFilter filter = new IntentFilter();
+           /* IntentFilter filter = new IntentFilter();
             filter.addAction("com.arunsudhir.radiomalayalam.PLAYER");
-            registerReceiver(receiver, filter);
+            registerReceiver(receiver, filter); */
         }
     }
 
@@ -108,7 +108,7 @@ public class SongDetailActivity extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class ServiceReciever extends BroadcastReceiver
+   /* public class ServiceReciever extends BroadcastReceiver
     {
 
         @Override
@@ -133,7 +133,7 @@ public class SongDetailActivity extends FragmentActivity {
                 albumArtTask.execute(songItem.getAlbumArtPath().replace(" ", "%20"));
             }
         }
-    }
+    }*/
 
     @Override
     protected void onResume() {

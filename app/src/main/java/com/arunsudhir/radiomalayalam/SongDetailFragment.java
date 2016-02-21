@@ -18,6 +18,8 @@ import com.arunsudhir.radiomalayalam.communication.DownloadImageTask;
 import com.arunsudhir.radiomalayalam.io.PlayerStateKeeper;
 import com.arunsudhir.radiomalayalam.service.PlayerService;
 import com.arunsudhir.radiomalayalam.song.SongItem;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.common.base.Function;
 
 import java.util.ArrayList;
@@ -88,7 +90,9 @@ public class SongDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         _rootView = inflater.inflate(R.layout.fragment_song_detail, container, false);
-
+        AdView mAdView = (AdView) _rootView.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
         // Show the dummy content as text in a TextView.
 
         updateViewAndAlbumArtFromSongItem(mItem, _rootView, _backupIcon);
